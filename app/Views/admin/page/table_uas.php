@@ -364,8 +364,8 @@
                     </div>
                     <div class="form-group">
                         <label class="text-black font-w500">Nilai UAS</label>
-                        <input type="number" min="0" max="100" class="form-control" required name="nilai_uas"
-                            value="<?= old('nilai_uas'); ?>">
+                        <input type="number" step="0.01" min="0" max="100" class="form-control" required
+                            name="nilai_uas" value="<?= old('nilai_uas'); ?>">
                     </div>
                     <div class="form-group">
                         <button type="submit" value="submit_nilai_uas" name="submit_nilai_uas"

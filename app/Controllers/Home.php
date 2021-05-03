@@ -3,12 +3,14 @@
 namespace App\Controllers;
 
 use App\Models\DetailKelasModels;
+use App\Models\KegiatanTugasModels;
 use App\Models\KegiatanUASModels;
 use App\Models\KelasModels;
 use App\Models\MahasiswaModels;
 use App\Models\UsersModels;
 use App\Models\KegiatanUTSModels;
 use App\Models\SikapModels;
+use App\Models\TugasModels;
 use App\Models\UASModels;
 use App\Models\UTSModels;
 use PHPExcel;
@@ -30,6 +32,8 @@ class Home extends BaseController
 		$this->m_uas = new UASModels();
 		$this->m_uts = new UTSModels();
 		$this->m_sikap = new SikapModels();
+		$this->m_tugas = new TugasModels();
+		$this->m_kegiatan_tugas = new KegiatanTugasModels();
 		$this->validate = \Config\Services::validation();
 		$this->service_img = \Config\Services::image();
 	}
@@ -103,8 +107,10 @@ class Home extends BaseController
 					"kegiatan_uts" => $this->m_kegiatan_uts->getAllKegiatanUTSWhereKelas($id_kelas),
 					'nilai_uts' => $this->m_kegiatan_uts->getAllNilai(),
 					"kegiatan_uas" => $this->m_kegiatan_uas->getAllKegiatanUASWhereKelas($id_kelas),
+					"kegiatan_tugas" => $this->m_kegiatan_tugas->getAllKegiatanTugasWhereKelas($id_kelas),
 					'nilai_uas' => $this->m_kegiatan_uas->getAllNilai(),
 					'nilai_sikap' => $this->m_sikap->findAll(),
+					'nilai_tugas' => $this->m_tugas->findAll(),
 					'total_per_kelas' => $this->m_mahasiswa->getTotalMahasiswaByKelas($id_kelas),
 				];
 				$total_nilai = 0;
@@ -234,7 +240,7 @@ class Home extends BaseController
 								'nilai_akhir' => 0,
 								'skala' => "0,00",
 								'karakter' => "E",
-								
+
 							]);
 							$id_mahasiswa = $this->m_mahasiswa->insertID();
 							if ($saveMahasiswaManual) {
@@ -329,22 +335,26 @@ class Home extends BaseController
 							$nilai_mahasiswa = $this->m_uts->findAll();
 							$mahasiswa = $this->m_mahasiswa->getAllMahasiswaWhereKelas($id_kelas);
 							$total_nilai = 0;
-							foreach ($mahasiswa as $mhs) {
-                                if (!empty($nilai_mahasiswa)) {
-                                    foreach ($nilai_mahasiswa as $n_mhs) {
-                                        if ($n_mhs['id_mahasiswa'] == $mhs['id_mahasiswa']) {
-                                            $total_nilai = $total_nilai + $n_mhs['nilai_uts'];
-                                            $rerata = $total_nilai / $total_uts;
-                                            $updateNilaiUTS = $this->m_mahasiswa->save([
-                                            'id_mahasiswa' => $mhs['id_mahasiswa'],
-                                            'nilai_uts' => $rerata,
-                                        ]);
-                                            $total_nilai = 0;
+							if (empty($mahasiswa)) {
+								$updateNilaiUTS = true;
+							} else {
+                                foreach ($mahasiswa as $mhs) {
+                                    if (!empty($nilai_mahasiswa)) {
+                                        foreach ($nilai_mahasiswa as $n_mhs) {
+                                            if ($n_mhs['id_mahasiswa'] == $mhs['id_mahasiswa']) {
+                                                $total_nilai = $total_nilai + $n_mhs['nilai_uts'];
+                                                $rerata = $total_nilai / $total_uts;
+                                                $updateNilaiUTS = $this->m_mahasiswa->save([
+                                                'id_mahasiswa' => $mhs['id_mahasiswa'],
+                                                'nilai_uts' => $rerata,
+                                            ]);
+                                                $total_nilai = 0;
+                                            }
                                         }
+									} else {
+                                        $updateNilaiUTS = true;
                                     }
-                                }else{
-									$updateNilaiUTS = true;
-								}
+                                }
 							}
 							if ($updateNilaiUTS) {
 								session()->setFlashdata('berhasil', 'Berhasil Menambahkan Kegiatan UTS');
@@ -355,6 +365,59 @@ class Home extends BaseController
 							}
 						} else {
 							session()->setFlashdata('gagal', 'Gagal Menambahkan Kegiatan UTS');
+							return redirect()->to('/masuk-kelas/' . $id_kelas);
+						}
+					}
+				} else if (!empty($this->request->getPost('submit_kegiatan_tugas'))) {
+					$formTambah = $this->validate([
+						'nama_tugas' => 'required|max_length[250]',
+						'tgl_tugas' => 'required|valid_date',
+					]);
+					if (!$formTambah) {
+						return redirect()->to('/masuk-kelas/' . $id_kelas)->withInput();
+					} else {
+						$saveTugas = $this->m_kegiatan_tugas->save([
+							"id_kelas" => $id_kelas,
+							"nama_tugas" => $this->request->getPost('nama_tugas'),
+							"kategori_tugas" => $this->request->getPost('kategori_tugas'),
+							"tgl_tugas" => $this->request->getPost('tgl_tugas'),
+							"created_by" => user()->username,
+						]);
+						if ($saveTugas) {
+							$total_tugas = $this->m_kegiatan_tugas->getTotalTugas($id_kelas);
+							$nilai_mahasiswa = $this->m_tugas->findAll();
+							$mahasiswa = $this->m_mahasiswa->getAllMahasiswaWhereKelas($id_kelas);
+							$total_nilai = 0;
+							if (empty($mahasiswa)) {
+								$updateTugas = true;
+							} else {
+								foreach ($mahasiswa as $mhs) {
+									if (!empty($nilai_mahasiswa)) {
+										foreach ($nilai_mahasiswa as $n_mhs) {
+											if ($n_mhs['id_mahasiswa'] == $mhs['id_mahasiswa']) {
+												$total_nilai = $total_nilai + $n_mhs['nilai_tugas'];
+												$rerata = $total_nilai / $total_tugas;
+												$updateTugas = $this->m_mahasiswa->save([
+													'id_mahasiswa' => $mhs['id_mahasiswa'],
+													'nilai_tugas' => $rerata,
+												]);
+												$total_nilai = 0;
+											}
+										}
+									} else {
+										$updateTugas = true;
+									}
+								}
+							}
+							if ($updateTugas) {
+								session()->setFlashdata('berhasil', 'Berhasil Menambahkan Kegiatan Tugas');
+								return redirect()->to('/masuk-kelas/' . $id_kelas);
+							} else {
+								session()->setFlashdata('gagal', 'Gagal Menambahkan Kegiatan Tugas');
+								return redirect()->to('/masuk-kelas/' . $id_kelas);
+							}
+						} else {
+							session()->setFlashdata('gagal', 'Gagal Menambahkan Kegiatan Tugas');
 							return redirect()->to('/masuk-kelas/' . $id_kelas);
 						}
 					}
@@ -509,21 +572,25 @@ class Home extends BaseController
 							$nilai_mahasiswa = $this->m_uas->findAll();
 							$mahasiswa = $this->m_mahasiswa->getAllMahasiswaWhereKelas($id_kelas);
 							$total_nilai = 0;
-							foreach ($mahasiswa as $mhs) {
-                                if (!empty($nilai_mahasiswa)) {
-                                    foreach ($nilai_mahasiswa as $n_mhs) {
-                                        if ($n_mhs['id_mahasiswa'] == $mhs['id_mahasiswa']) {
-                                            $total_nilai = $total_nilai + $n_mhs['nilai_uas'];
-                                            $rerata = $total_nilai / $total_uas;
-                                            $updateNilaiUAS = $this->m_mahasiswa->save([
-                                            'id_mahasiswa' => $n_mhs['id_mahasiswa'],
-                                            'nilai_uas' => $rerata,
-                                        ]);
-                                            $total_nilai = 0;
-                                        }
-                                    }
-                                }else{
-									$updateNilaiUAS = true;
+							if (empty($mahasiswa)) {
+								$updateNilaiUAS = true;
+							} else {
+								foreach ($mahasiswa as $mhs) {
+									if (!empty($nilai_mahasiswa)) {
+										foreach ($nilai_mahasiswa as $n_mhs) {
+											if ($n_mhs['id_mahasiswa'] == $mhs['id_mahasiswa']) {
+												$total_nilai = $total_nilai + $n_mhs['nilai_uas'];
+												$rerata = $total_nilai / $total_uas;
+												$updateNilaiUAS = $this->m_mahasiswa->save([
+													'id_mahasiswa' => $n_mhs['id_mahasiswa'],
+													'nilai_uas' => $rerata,
+												]);
+												$total_nilai = 0;
+											}
+										}
+									} else {
+										$updateNilaiUAS = true;
+									}
 								}
 							}
 							if ($updateNilaiUAS) {
@@ -683,19 +750,19 @@ class Home extends BaseController
 					$mahasiswa = $this->m_mahasiswa->getAllMahasiswaWhereKelas($id_kelas);
 					$total_nilai = 0;
 					foreach ($mahasiswa as $mhs) {
-                        if (!empty($nilai_mahasiswa)) {
-                            foreach ($nilai_mahasiswa as $n_mhs) {
-                                if ($n_mhs['id_mahasiswa'] == $mhs['id_mahasiswa']) {
-                                    $total_nilai = $total_nilai + $n_mhs['nilai_uts'];
-                                    $rerata = $total_nilai / $total_uts;
-                                    $updateNilaiUTS = $this->m_mahasiswa->save([
-                                    'id_mahasiswa' => $mhs['id_mahasiswa'],
-                                    'nilai_uts' => $rerata,
-                                ]);
-                                    $total_nilai = 0;
-                                }
-                            }
-                        }else{
+						if (!empty($nilai_mahasiswa)) {
+							foreach ($nilai_mahasiswa as $n_mhs) {
+								if ($n_mhs['id_mahasiswa'] == $mhs['id_mahasiswa']) {
+									$total_nilai = $total_nilai + $n_mhs['nilai_uts'];
+									$rerata = $total_nilai / $total_uts;
+									$updateNilaiUTS = $this->m_mahasiswa->save([
+										'id_mahasiswa' => $mhs['id_mahasiswa'],
+										'nilai_uts' => $rerata,
+									]);
+									$total_nilai = 0;
+								}
+							}
+						} else {
 							$updateNilaiUTS = true;
 						}
 					}
@@ -729,19 +796,19 @@ class Home extends BaseController
 					$mahasiswa = $this->m_mahasiswa->getAllMahasiswaWhereKelas($id_kelas);
 					$total_nilai = 0;
 					foreach ($mahasiswa as $mhs) {
-                        if (!empty($nilai_mahasiswa)) {
-                            foreach ($nilai_mahasiswa as $n_mhs) {
-                                if ($n_mhs['id_mahasiswa'] == $mhs['id_mahasiswa']) {
-                                    $total_nilai = $total_nilai + $n_mhs['nilai_uas'];
-                                    $rerata = $total_nilai / $total_uas;
-                                    $updateNilaiUAS = $this->m_mahasiswa->save([
-                                    'id_mahasiswa' => $n_mhs['id_mahasiswa'],
-                                    'nilai_uas' => $rerata,
-                                ]);
-                                    $total_nilai = 0;
-                                }
-                            }
-                        }else{
+						if (!empty($nilai_mahasiswa)) {
+							foreach ($nilai_mahasiswa as $n_mhs) {
+								if ($n_mhs['id_mahasiswa'] == $mhs['id_mahasiswa']) {
+									$total_nilai = $total_nilai + $n_mhs['nilai_uas'];
+									$rerata = $total_nilai / $total_uas;
+									$updateNilaiUAS = $this->m_mahasiswa->save([
+										'id_mahasiswa' => $n_mhs['id_mahasiswa'],
+										'nilai_uas' => $rerata,
+									]);
+									$total_nilai = 0;
+								}
+							}
+						} else {
 							$updateNilaiUAS = true;
 						}
 					}
@@ -1070,27 +1137,27 @@ class Home extends BaseController
 			$cari_kelas = $this->m_kelas->getKelasByIDAndUser($id_kelas, user()->id);
 			if (!empty($cari_kelas)) {
 				$cari_mahasiswa = $this->m_mahasiswa->deleteWhereMahasiswa($id_kelas);
-                if (!empty($cari_mahasiswa)) {
-                    foreach ($cari_mahasiswa as $mhs) {
-                        if ($this->m_mahasiswa->delete($mhs['id_mahasiswa'])) {
-                            $status = true;
-                        } else {
-                            $status = false;
-                            break;
-                        }
-                    }
-                }else{
+				if (!empty($cari_mahasiswa)) {
+					foreach ($cari_mahasiswa as $mhs) {
+						if ($this->m_mahasiswa->delete($mhs['id_mahasiswa'])) {
+							$status = true;
+						} else {
+							$status = false;
+							break;
+						}
+					}
+				} else {
 					$status = true;
 				}
-                if ($status) {
-                    if ($this->m_detail_kelas->deleteAllMahasiswaWhereKelas($id_kelas)) {
-                        session()->setFlashdata('berhasil', 'Berhasil Dihapus');
-                        return redirect()->to('/masuk-kelas/' . $id_kelas);
-                    } else {
-                        session()->setFlashdata('gagal', 'Gagal Dihapus');
-                        return redirect()->to('/masuk-kelas/' . $id_kelas);
-                    }
-                }else{
+				if ($status) {
+					if ($this->m_detail_kelas->deleteAllMahasiswaWhereKelas($id_kelas)) {
+						session()->setFlashdata('berhasil', 'Berhasil Dihapus');
+						return redirect()->to('/masuk-kelas/' . $id_kelas);
+					} else {
+						session()->setFlashdata('gagal', 'Gagal Dihapus');
+						return redirect()->to('/masuk-kelas/' . $id_kelas);
+					}
+				} else {
 					session()->setFlashdata('gagal', 'Gagal Dihapus');
 					return redirect()->to('/masuk-kelas/' . $id_kelas);
 				}
@@ -1137,16 +1204,16 @@ class Home extends BaseController
 				}
 				if ($unlink) {
 					$cari_mahasiswa = $this->m_mahasiswa->deleteWhereMahasiswa($id_kelas);
-                    if (!empty($cari_mahasiswa)) {
-                        foreach ($cari_mahasiswa as $mhs) {
-                            if ($this->m_mahasiswa->delete($mhs['id_mahasiswa'])) {
-                                $status = true;
-                            } else {
-                                $status = false;
-                                break;
-                            }
-                        }
-                    }else{
+					if (!empty($cari_mahasiswa)) {
+						foreach ($cari_mahasiswa as $mhs) {
+							if ($this->m_mahasiswa->delete($mhs['id_mahasiswa'])) {
+								$status = true;
+							} else {
+								$status = false;
+								break;
+							}
+						}
+					} else {
 						$status = true;
 					}
 					if ($status) {

@@ -1,9 +1,9 @@
-<div id="uts" class="tab-pane fade">
+<div id="tugas" class="tab-pane fade">
     <div class="pt-4 border-bottom-1 pb-3">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Kegiatan UTS</h4>
+                    <h4 class="card-title">Data Tugas Yang Diberikan</h4>
                     <div class="dropdown ml-auto">
                         <a href="#" class="btn btn-primary light sharp" data-toggle="dropdown" aria-expanded="true"><svg
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -19,47 +19,47 @@
                             </svg></a>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li class="dropdown-item"><a href="#" data-toggle="modal"
-                                    data-target="#tambahKegiatanUTS"><i class="fa fa-plus text-primary mr-2"></i>
-                                    Tambah Kegiatan UTS</a></li>
+                                    data-target="#tambahKegiatanTugas"><i class="fa fa-plus text-primary mr-2"></i>
+                                    Tambah Tugas Diberikan</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="example" class="display" style="width: 100%">
+                        <table id="example3" class="display" style="width: 100%">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Kategori UTS</th>
-                                    <th>Nama UTS</th>
-                                    <th>Tanggal UTS</th>
+                                    <th>Kategori Tugas</th>
+                                    <th>Nama Tugas</th>
+                                    <th>Tanggal Tugas</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
                                 $i = 1;
-                                foreach ($kegiatan_uts as $uts) :
-                                ?>
+                                foreach ($kegiatan_tugas as $tugas) : ?>
                                 <tr>
                                     <td><?= $i++; ?></td>
-                                    <td><?= $uts['kategori_uts']; ?></td>
-                                    <td><?= $uts['nama_uts']; ?></td>
-                                    <td> <?= date('d F Y', strtotime($uts['tgl_uts'])) ?></td>
+                                    <td><?= $tugas['kategori_tugas']; ?></td>
+                                    <td><?= $tugas['nama_tugas']; ?></td>
+                                    <td> <?= date('d F Y', strtotime($tugas['tgl_tugas'])) ?></td>
                                     <td>
                                         <div class="d-flex">
                                             <a href="#" data-toggle="modal"
-                                                data-target="#ubahKegiatanUTS-<?= $uts['id_kegiatan_uts']; ?>"><button
+                                                data-target="#ubahKegiatanTugas-<?= $tugas['id_kegiatan_tugas']; ?>"><button
                                                     type="button" class="btn btn-primary shadow btn-xs sharp mr-1"
                                                     data-toggle="tooltip" data-placement="bottom"
-                                                    title="Ubah Kegiatan UTS"><i class="fa fa-pencil"></i></button></a>
+                                                    title="Ubah Kegiatan Tugas"><i
+                                                        class="fa fa-pencil"></i></button></a>
                                             <!-- Ubah Mahasiswa -->
                                             <div class="modal fade"
-                                                id="ubahKegiatanUTS-<?= $uts['id_kegiatan_uts']; ?>">
+                                                id="ubahKegiatanTugas-<?= $tugas['id_kegiatan_tugas']; ?>">
                                                 <div class=" modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title">Ubah Kegiatan UTS</h5>
+                                                            <h5 class="modal-title">Ubah Kegiatan Tugas</h5>
                                                             <button type="button" class="close"
                                                                 data-dismiss="modal"><span>&times;</span>
                                                             </button>
@@ -69,15 +69,15 @@
                                                                 <?= csrf_field(); ?>
                                                                 <div class="form-group">
                                                                     <label class="text-black font-w500">Nama
-                                                                        UTS</label>
+                                                                        Tugas</label>
                                                                     <input type="text" class="form-control" required
-                                                                        name="nama_uts"
-                                                                        value="<?= (old('nama_uts')) ? old('nama_uts') : $uts['nama_uts']; ?>">
+                                                                        name="nama_tugas"
+                                                                        value="<?= (old('nama_tugas')) ? old('nama_tugas') : $tugas['nama_tugas']; ?>">
                                                                 </div>
                                                                 <?php
                                                                     $praktek = "";
                                                                     $teori = "";
-                                                                    if ($uts['kategori_uts'] == "Teori") {
+                                                                    if ($tugas['kategori_tugas'] == "Teori") {
                                                                         $teori = "selected";
                                                                     } else {
                                                                         $praktek = "selected";
@@ -85,9 +85,9 @@
                                                                     ?>
                                                                 <div class="form-group">
                                                                     <label class="text-black font-w500">Kategori
-                                                                        UTS</label>
+                                                                        Tugas</label>
                                                                     <select class="form-control default-select" required
-                                                                        name="kategori_uts">
+                                                                        name="kategori_tugas">
                                                                         <option value="Teori" <?= $teori; ?>>Teori
                                                                         </option>
                                                                         <option value="Praktek" <?= $praktek; ?>>
@@ -96,17 +96,17 @@
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label class="text-black font-w500">Tanggal
-                                                                        UTS</label>
+                                                                        Tugas</label>
                                                                     <input type="date" class="form-control" required
-                                                                        name="tgl_uts"
-                                                                        value="<?= (old('tgl_uts')) ? old('tgl_uts') : $uts['tgl_uts']; ?>">
+                                                                        name="tgl_tugas"
+                                                                        value="<?= (old('tgl_tugas')) ? old('tgl_tugas') : $tugas['tgl_tugas']; ?>">
                                                                 </div>
-                                                                <input type="hidden" name="id_kegiatan_uts"
-                                                                    value="<?= $uts['id_kegiatan_uts']; ?>">
+                                                                <input type="hidden" name="id_kegiatan_tugas"
+                                                                    value="<?= $tugas['id_kegiatan_tugas']; ?>">
                                                                 <div class="form-group">
                                                                     <button type="submit"
-                                                                        value="submit_ubah_kegiatan_uts"
-                                                                        name="submit_ubah_kegiatan_uts"
+                                                                        value="submit_ubah_kegiatan_tugas"
+                                                                        name="submit_ubah_kegiatan_tugas"
                                                                         class="btn btn-primary">UNGGAH</button>
                                                                 </div>
                                                             </form>
@@ -114,10 +114,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <a href="<?= base_url(); ?>/hapus-kegiatan-uts/<?= $uts['id_kegiatan_uts']; ?>/<?= $d_kelas[0]['id_kelas']; ?>"
+                                            <a href="<?= base_url(); ?>/hapus-kegiatan-tugas/<?= $tugas['id_kegiatan_tugas']; ?>/<?= $d_kelas[0]['id_kelas']; ?>"
                                                 class="btn btn-danger shadow btn-xs sharp tombol-hapus"><i
                                                     class="fa fa-trash" data-toggle="tooltip" data-placement="bottom"
-                                                    title="Hapus Kegiatan UTS"></i></a>
+                                                    title="Hapus Kegiatan Tugas"></i></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -129,12 +129,12 @@
             </div>
         </div>
     </div>
-    <?php if (!empty($kegiatan_uts)) : ?>
+    <?php if (!empty($kegiatan_tugas)) : ?>
     <div class="pt-4 border-bottom-1 pb-3">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Nilai UTS</h4>
+                    <h4 class="card-title">Nilai Tugas</h4>
                     <div class="dropdown ml-auto">
                         <a href="#" class="btn btn-primary light sharp" data-toggle="dropdown" aria-expanded="true"><svg
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -149,12 +149,12 @@
                                 </g>
                             </svg></a>
                         <ul class="dropdown-menu dropdown-menu-right">
-                            <li class="dropdown-item"><a href="#" data-toggle="modal" data-target="#tambahNilaiUTS"><i
+                            <li class="dropdown-item"><a href="#" data-toggle="modal" data-target="#tambahNilaiTugas"><i
                                         class="fa fa-plus text-primary mr-2"></i>
-                                    Tambah Nilai UTS</a></li>
+                                    Tambah Nilai Tugas</a></li>
                             <?php if (!empty($mahasiswa)) : ?>
                             <li class="dropdown-item"><i class="fa fa-trash text-primary mr-2"><a
-                                        href="<?= base_url(); ?>/hapus-seluruh-nilai-uts/<?= $d_kelas[0]['id_kelas']; ?>"
+                                        href="<?= base_url(); ?>/hapus-seluruh-nilai-tugas/<?= $d_kelas[0]['id_kelas']; ?>"
                                         class="tombol-hapus"></i>
                                 Kosongkan Seluruh Nilai</a></li>
                             <?php endif; ?>
@@ -187,16 +187,16 @@
                                     <td><?= $m['nim_mahasiswa']; ?></td>
                                     <td><?= $m['nama_mahasiswa']; ?></td>
                                     <td><a href="#" data-toggle="modal"
-                                            data-target="#modalLihatNilai-<?= $m['id_mahasiswa']; ?>"><button
+                                            data-target="#modalLihatNilaiTugas-<?= $m['id_mahasiswa']; ?>"><button
                                                 type="button" class="btn btn-primary btn-sm">Detail
                                                 Nilai</button></a>
                                     </td>
                                     <!-- Ubah,Lihat Nilai -->
-                                    <div class="modal fade" id="modalLihatNilai-<?= $m['id_mahasiswa']; ?>">
+                                    <div class="modal fade" id="modalLihatNilaiTugas-<?= $m['id_mahasiswa']; ?>">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title">Lihat Nilai UTS</h5>
+                                                    <h5 class="modal-title">Lihat Nilai Tugas</h5>
                                                     <button type="button" class="close"
                                                         data-dismiss="modal"><span>&times;</span>
                                                     </button>
@@ -210,14 +210,16 @@
                                                             <input type="text" class="form-control" disabled
                                                                 value="<?= $m['nim_mahasiswa']; ?> - <?= $m['nama_mahasiswa']; ?>">
                                                         </div>
-                                                        <?php foreach ($nilai_uts as $n) : ?>
-                                                        <?php if ($n['id_mahasiswa'] == $m['id_mahasiswa']) : ?>
+
+                                                        <?php foreach ($nilai_tugas as $nilai) : ?>
+                                                        <?php if ($nilai['id_mahasiswa'] == $m['id_mahasiswa']) : ?>
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Nilai
-                                                                <?= $n['nama_uts']; ?> (<?= $n['kategori_uts']; ?>
+                                                                <?= $nilai['nama_tugas']; ?>
+                                                                (<?= $nilai['kategori_tugas']; ?>
                                                                 )</label>
                                                             <input type="text" class="form-control" disabled
-                                                                value="<?= $n['nilai_uts']; ?>">
+                                                                value="<?= $nilai['nilai_tugas']; ?>">
                                                         </div>
                                                         <?php endif; ?>
                                                         <?php endforeach; ?>
@@ -231,34 +233,34 @@
                                         </div>
                                     </div>
                                     <!-- End Ubah,Lihat Nilai -->
-                                    <?php if (empty($m['nilai_uts'])) : ?>
+                                    <?php if (empty($m['nilai_tugas'])) : ?>
                                     <td><strong>Nilai Tidak Ada</strong></td>
                                     <?php else : ?>
-                                    <td><strong><?= $m['nilai_uts']; ?></strong></td>
+                                    <td><strong><?= $m['nilai_tugas']; ?></strong></td>
                                     <?php endif; ?>
                                     <?php
-                                            if ($m['nilai_uts'] >= 85 && $m['nilai_uts'] <= 100) {
+                                            if ($m['nilai_tugas'] >= 85 && $m['nilai_tugas'] <= 100) {
                                                 $skala = "4,00";
                                                 $huruf = "A";
-                                            } else if ($m['nilai_uts'] >= 81 && $m['nilai_uts'] <= 84) {
+                                            } else if ($m['nilai_tugas'] >= 81 && $m['nilai_tugas'] <= 84) {
                                                 $skala = "3,75";
                                                 $huruf = "A-";
-                                            } else if ($m['nilai_uts'] >= 77 && $m['nilai_uts'] <= 80) {
+                                            } else if ($m['nilai_tugas'] >= 77 && $m['nilai_tugas'] <= 80) {
                                                 $skala = "3,25";
                                                 $huruf = "B+";
-                                            } else if ($m['nilai_uts'] >= 73 && $m['nilai_uts'] <= 76) {
+                                            } else if ($m['nilai_tugas'] >= 73 && $m['nilai_tugas'] <= 76) {
                                                 $skala = "3,00";
                                                 $huruf = "B";
-                                            } else if ($m['nilai_uts'] >= 69 && $m['nilai_uts'] <= 72) {
+                                            } else if ($m['nilai_tugas'] >= 69 && $m['nilai_tugas'] <= 72) {
                                                 $skala = "2,75";
                                                 $huruf = "B-";
-                                            } else if ($m['nilai_uts'] >= 65 && $m['nilai_uts'] <= 68) {
+                                            } else if ($m['nilai_tugas'] >= 65 && $m['nilai_tugas'] <= 68) {
                                                 $skala = "2,50";
                                                 $huruf = "C+";
-                                            } else if ($m['nilai_uts'] >= 61 && $m['nilai_uts'] <= 64) {
+                                            } else if ($m['nilai_tugas'] >= 61 && $m['nilai_tugas'] <= 64) {
                                                 $skala = "2,00";
                                                 $huruf = "C";
-                                            } else if ($m['nilai_uts'] >= 40 && $m['nilai_uts'] <= 60) {
+                                            } else if ($m['nilai_tugas'] >= 40 && $m['nilai_tugas'] <= 60) {
                                                 $skala = "1,00";
                                                 $huruf = "D";
                                             } else {
@@ -271,7 +273,7 @@
                                     <td><?= $huruf; ?></td>
                                     <td>
                                         <div class="d-flex">
-                                            <a href="<?= base_url(); ?>/hapus-nilai-uts/<?= $m['id_mahasiswa']; ?>/<?= $d_kelas[0]['id_kelas']; ?>"
+                                            <a href="<?= base_url(); ?>/hapus-nilai-tugas/<?= $m['id_mahasiswa']; ?>/<?= $d_kelas[0]['id_kelas']; ?>"
                                                 class="btn btn-danger shadow btn-xs sharp tombol-hapus"><i
                                                     class="fa fa-trash" data-toggle="tooltip" data-placement="bottom"
                                                     title="Kosongkan Nilai Mahasiswa"></i></a>
@@ -287,18 +289,17 @@
         </div>
     </div>
     <?php endif; ?>
-
 </div>
 
 
 
 <!-- Modal -->
-<!-- Tambah Kegiatan UTS-->
-<div class="modal fade" id="tambahKegiatanUTS">
+<!-- Tambah Kegiatan Tugas-->
+<div class="modal fade" id="tambahKegiatanTugas">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Kegiatan UTS</h5>
+                <h5 class="modal-title">Tambah Data Tugas</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                 </button>
             </div>
@@ -306,23 +307,24 @@
                 <form action="" method="POST">
                     <?= csrf_field(); ?>
                     <div class="form-group">
-                        <label class="text-black font-w500">Nama Kegiatan UTS</label>
-                        <input type="text" class="form-control" required name="nama_uts"
-                            value="<?= old('nama_uts'); ?>">
+                        <label class="text-black font-w500">Nama Kegiatan Tugas</label>
+                        <input type="text" class="form-control" required name="nama_tugas"
+                            value="<?= old('nama_tugas'); ?>">
                     </div>
                     <div class="form-group">
-                        <label class="text-black font-w500">Kategori UTS</label>
-                        <select class="form-control default-select" required name="kategori_uts">
+                        <label class="text-black font-w500">Kategori Tugas</label>
+                        <select class="form-control default-select" required name="kategori_tugas">
                             <option value="Teori">Teori</option>
                             <option value="Praktek">Praktek</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="text-black font-w500">Tanggal UTS</label>
-                        <input type="date" class="form-control" required name="tgl_uts" value="<?= old('tgl_uts'); ?>">
+                        <label class="text-black font-w500">Tanggal Tugas</label>
+                        <input type="date" class="form-control" required name="tgl_tugas"
+                            value="<?= old('tgl_tugas'); ?>">
                     </div>
                     <div class="form-group">
-                        <button type="submit" value="submit_kegiatan_uts" name="submit_kegiatan_uts"
+                        <button type="submit" value="submit_kegiatan_tugas" name="submit_kegiatan_tugas"
                             class="btn btn-primary">UNGGAH</button>
                     </div>
                 </form>
@@ -330,14 +332,14 @@
         </div>
     </div>
 </div>
-<!-- End Tambah Kegiatan UTS-->
+<!-- End Tambah Kegiatan Tugas-->
 
 <!-- Tambah Nilai -->
-<div class="modal fade" id="tambahNilaiUTS">
+<div class="modal fade" id="tambahNilaiTugas">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Nilai UTS</h5>
+                <h5 class="modal-title">Tambah Nilai Tugas</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                 </button>
             </div>
@@ -345,11 +347,11 @@
                 <form action="" method="POST" enctype="multipart/form-data">
                     <?= csrf_field(); ?>
                     <div class="form-group">
-                        <label class="text-black font-w500">Kategori UTS</label>
-                        <select class="form-control default-select" required name="kategori_uts">
-                            <?php foreach ($kegiatan_uts as $uts) : ?>
-                            <option value="<?= $uts['id_kegiatan_uts']; ?>"><?= $uts['kategori_uts']; ?> -
-                                <?= $uts['nama_uts']; ?></option>
+                        <label class="text-black font-w500">Kategori Tugas</label>
+                        <select class="form-control default-select" required name="kategori_tugas">
+                            <?php foreach ($kegiatan_tugas as $tugas) : ?>
+                            <option value="<?= $tugas['id_kegiatan_tugas']; ?>"><?= $tugas['kategori_tugas']; ?> -
+                                <?= $tugas['nama_tugas']; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -363,12 +365,12 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="text-black font-w500">Niilai UTS</label>
-                        <input type="number" step="0.01" min="0" max="100" class="form-control" required
-                            name="nilai_uts" value="<?= old('nilai_uts'); ?>">
+                        <label class="text-black font-w500">Nilai Tugas</label>
+                        <input type="number" min="0" step="0.01" max="100" class="form-control" required
+                            name="nilai_tugas" value="<?= old('nilai_tugas'); ?>">
                     </div>
                     <div class="form-group">
-                        <button type="submit" value="submit_nilai_uts" name="submit_nilai_uts"
+                        <button type="submit" value="submit_nilai_tugas" name="submit_nilai_tugas"
                             class="btn btn-primary">UNGGAH</button>
                     </div>
                 </form>

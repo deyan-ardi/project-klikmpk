@@ -175,6 +175,9 @@
                                     <li class="nav-item"><a href="#keseluruhan" data-toggle="tab"
                                             class="nav-link active show">Nilai Keseluruhan</a>
                                     </li>
+                                    <li class="nav-item"><a href="#tugas" data-toggle="tab" class="nav-link">Nilai
+                                            Tugas</a>
+                                    </li>
                                     <li class="nav-item"><a href="#uts" data-toggle="tab" class="nav-link">Nilai
                                             UTS</a>
                                     </li>
@@ -186,6 +189,7 @@
                                 </ul>
                                 <div class="tab-content">
                                     <?= $this->include('admin/page/table_keseluruhan'); ?>
+                                    <?= $this->include('admin/page/table_tugas'); ?>
                                     <?= $this->include('admin/page/table_uts'); ?>
                                     <?= $this->include('admin/page/table_uas'); ?>
                                     <?= $this->include('admin/page/table_sikap'); ?>

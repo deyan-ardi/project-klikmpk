@@ -88,22 +88,26 @@
                                                         <?php if ($sikap['id_mahasiswa'] == $m['id_mahasiswa']) : ?>
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Santun</label>
-                                                            <input type="number" disabled class="form-control"
+                                                            <input type="number" step="0.01" disabled
+                                                                class="form-control"
                                                                 value="<?= $sikap['nilai_santun']; ?>">
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Displin</label>
-                                                            <input type="number" disabled class="form-control"
+                                                            <input type="number" step="0.01" disabled
+                                                                class="form-control"
                                                                 value="<?= $sikap['nilai_disiplin']; ?>">
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Berani</label>
-                                                            <input type="number" disabled class="form-control"
+                                                            <input type="number" step="0.01" disabled
+                                                                class="form-control"
                                                                 value="<?= $sikap['nilai_berani']; ?>">
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Rata-Rata Nilai</label>
-                                                            <input type="number" disabled class="form-control"
+                                                            <input type="number" step="0.01" disabled
+                                                                class="form-control"
                                                                 value="<?= $sikap['hasil_nilai_sikap']; ?>">
                                                         </div>
                                                         <?php endif; ?>
@@ -145,22 +149,26 @@
                                                         <?php if ($sikap['id_mahasiswa'] == $m['id_mahasiswa']) : ?>
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Kehadiran</label>
-                                                            <input type="number" disabled class="form-control"
+                                                            <input type="number" step="0.01" disabled
+                                                                class="form-control"
                                                                 value="<?= $sikap['nilai_kehadiran']; ?>">
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Kepatuhan</label>
-                                                            <input type="number" disabled class="form-control"
+                                                            <input type="number" step="0.01" disabled
+                                                                class="form-control"
                                                                 value="<?= $sikap['nilai_kepatuhan']; ?>">
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Keaktifan</label>
-                                                            <input type="number" disabled class="form-control"
+                                                            <input type="number" step="0.01" disabled
+                                                                class="form-control"
                                                                 value="<?= $sikap['nilai_keaktifan']; ?>">
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Rata-Rata Nilai</label>
-                                                            <input type="number" disabled class="form-control"
+                                                            <input type="number" step="0.01" disabled
+                                                                class="form-control"
                                                                 value="<?= $sikap['hasil_nilai_partisipasi']; ?>">
                                                         </div>
                                                         <?php endif; ?>
@@ -259,35 +267,35 @@
                     <h5 class="text-center mt-5">Penilaian Sikap</h5>
                     <div class="form-group">
                         <label class="text-black font-w500">Santun</label>
-                        <input type="number" min="0" max="100" placeholder="0-100" class="form-control" required
-                            name="santun" value="<?= old('santun'); ?>">
+                        <input type="number" step="0.01" min="0" max="100" placeholder="0-100" class="form-control"
+                            required name="santun" value="<?= old('santun'); ?>">
                     </div>
                     <div class="form-group">
                         <label class="text-black font-w500">Displin</label>
-                        <input type="number" min="0" max="100" placeholder="0-100" class="form-control" required
-                            name="disiplin" value="<?= old('disiplin'); ?>">
+                        <input type="number" step="0.01" min="0" max="100" placeholder="0-100" class="form-control"
+                            required name="disiplin" value="<?= old('disiplin'); ?>">
                     </div>
                     <div class="form-group">
                         <label class="text-black font-w500">Berani</label>
-                        <input type="number" min="0" max="100" placeholder="0-100" class="form-control" required
-                            name="berani" value="<?= old('berani'); ?>">
+                        <input type="number" step="0.01" min="0" max="100" placeholder="0-100" class="form-control"
+                            required name="berani" value="<?= old('berani'); ?>">
                     </div>
 
                     <h5 class="text-center mt-5">Penilaian Partisipasi</h5>
                     <div class="form-group">
                         <label class="text-black font-w500">Kehadiran</label>
-                        <input type="number" min="0" max="100" placeholder="0-100" class="form-control" required
-                            name="kehadiran" value="<?= old('kehadiran'); ?>">
+                        <input type="number" step="0.01" min="0" max="100" placeholder="0-100" class="form-control"
+                            required name="kehadiran" value="<?= old('kehadiran'); ?>">
                     </div>
                     <div class="form-group">
                         <label class="text-black font-w500">Kepatuhan</label>
-                        <input type="number" min="0" max="100" placeholder="0-100" class="form-control" required
-                            name="kepatuhan" value="<?= old('kepatuhan'); ?>">
+                        <input type="number" step="0.01" min="0" max="100" placeholder="0-100" class="form-control"
+                            required name="kepatuhan" value="<?= old('kepatuhan'); ?>">
                     </div>
                     <div class="form-group">
                         <label class="text-black font-w500">Keaktifan</label>
-                        <input type="number" min="0" max="100" placeholder="0-100" class="form-control" required
-                            name="keaktifan" value="<?= old('keaktifan'); ?>">
+                        <input type="number" step="0.01" min="0" max="100" placeholder="0-100" class="form-control"
+                            required name="keaktifan" value="<?= old('keaktifan'); ?>">
                     </div>
                     <div class="form-group">
                         <button type="submit" value="submit_nilai_sikap_partisipasi"
