@@ -286,3 +286,16 @@ function deleteAllCookie(reload = true)
 	
 
 })(jQuery);
+function copy_text() {
+  $("#salin-text").select();
+  if (document.execCommand("copy")) {
+    $("#btn-click").text("Berhasil Disalin");
+    $("#btn-click").removeClass("btn-dark");
+    $("#btn-click").addClass("btn-success");
+    setTimeout(function () {
+      $("#btn-click").text("Salin Tautan");
+      $("#btn-click").removeClass("btn-success");
+      $("#btn-click").addClass("btn-dark");
+    }, 2500);
+  }
+}

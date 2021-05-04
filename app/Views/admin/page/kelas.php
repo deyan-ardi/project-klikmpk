@@ -186,6 +186,26 @@
                                     <li class="nav-item"><a href="#sikap" data-toggle="tab" class="nav-link">Nilai Sikap
                                             dan Partisipasi</a>
                                     </li>
+                                    <?php if (!empty($d_kelas[0]['tautan'])) : ?>
+                                    <li>
+                                        <div class="dropdown mr-auto">
+                                            <a href="#" class="btn btn-warning light sharp" data-toggle="dropdown"
+                                                aria-expanded="true"><i class="fa fa-lock text-primary mr-2"></i>
+                                                Dibagikan</a>
+                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                <li class="dropdown-item"><a href="#" data-toggle="modal"
+                                                        data-target="#urlBagikan"><i
+                                                            class="fa fa-link text-primary mr-2"></i> Salin Tautan</li>
+                                                <li class="dropdown-item"><a
+                                                        href="<?= base_url(); ?>/berhenti-membagikan/<?= $d_kelas[0]['id_kelas']; ?>"><i
+                                                            class="fa fa-stop-circle text-primary mr-2"></i> Berhenti
+                                                        Bagikan
+                                                </li>
+                                                </a>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <?php endif; ?>
                                 </ul>
                                 <div class="tab-content">
                                     <?= $this->include('admin/page/table_keseluruhan'); ?>
@@ -206,4 +226,35 @@
             Content body end
         ***********************************-->
 
+
+<!-- URL Bagikan-->
+<div class="modal fade" id="urlBagikan">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bagikan Detail Nilai</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <?= csrf_field(); ?>
+
+                <div class="form-group">
+                    <label class="text-black font-w500">Tautan Bagikan</label>
+                    <input type="text" id="salin-text" class="form-control" readonly
+                        value="<?= base_url(); ?>/b/<?= $d_kelas[0]['tautan']; ?>" required name="tautan">
+                </div>
+                <label class="text-black font-w500">Dengan membagikan tautan ini, maka siapapun yang memiliki tautan
+                    ini memiliki hak akses untuk melihat nilai yang dibagikan dari kelas ini</label>
+                <div class="form-group mt-3">
+                    <button type="button" id="btn-click" onclick="copy_text()" class="btn btn-dark">Salin
+                        Tautan</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End URL Bagikan-->
 <?php $this->endSection() ?>

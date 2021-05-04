@@ -32,6 +32,10 @@
                                             href="<?= base_url(); ?>/hapus-seluruh-mahasiswa/<?= $d_kelas[0]['id_kelas']; ?>"
                                             class="tombol-hapus"></i>
                                     Hapus Seluruh Mahasiswa</a></li>
+                                <li class="dropdown-item"><a href="#" data-toggle="modal" data-target="#shareAll"><i
+                                            class="fa fa-share text-primary mr-2"></i>
+                                        Berbagi Detail Nilai</a>
+                                </li>
                                 <li class="dropdown-item"><a
                                         href="<?= base_url(); ?>/export-excel/<?= $d_kelas[0]['id_kelas']; ?>"><i
                                             class="fa fa-download text-primary mr-2"></i>
@@ -51,6 +55,7 @@
                                         <th>Nim Mahasiswa</th>
                                         <th>Nama Mahasiswa</th>
                                         <th>Nilai Sikap</th>
+                                        <th>Nilai Tugas</th>
                                         <th>Nilai UTS</th>
                                         <th>Nilai UAS</th>
                                         <th>Nilai Total</th>
@@ -73,7 +78,12 @@
                                         <?php else : ?>
                                         <td><?= $m['nilai_sikap']; ?></td>
                                         <?php endif; ?>
-                                        <?php if (empty($m['nilai_uts'])) : ?>
+                                        <?php if (empty($m['nilai_tugas'])) : ?>
+                                        <td>Belum Ada</td>
+                                        <?php else : ?>
+                                        <td><?= $m['nilai_tugas']; ?></td>
+                                        <?php endif; ?>
+                                        <?php if (empty($m['nilai_tugas'])) : ?>
                                         <td>Belum Ada</td>
                                         <?php else : ?>
                                         <td><?= $m['nilai_uts']; ?></td>
@@ -235,3 +245,112 @@
     </div>
 </div>
 <!-- End Tambah Excel -->
+
+<!-- Tambah Bagikan Nilai-->
+<div class="modal fade" id="shareAll">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Setelan Detail Nilai Yang Dibagikan</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    <?= csrf_field(); ?>
+                    <?php
+                    $sel_1 = "";
+                    $sel_2 = "";
+                    if (!empty($d_kelas[0]['n_seluruh'])) {
+                        if ($d_kelas[0]['n_seluruh'] == 1) {
+                            $sel_1 = "selected";
+                        } else {
+                            $sel_2 = "selected";
+                        }
+                    } ?>
+
+                    <div class="form-group">
+                        <label class="text-black font-w500">Rekapan Nilai Keseluruhan</label>
+                        <select name="n_seluruh" id="n_seluruh" required class="form-control default-select">
+                            <option value="1" <?= $sel_1; ?>>Bagikan</option>
+                            <option value="2" <?= $sel_2; ?>>Sembunyikan</option>
+                        </select>
+                    </div>
+                    <?php
+                    $tug_1 = "";
+                    $tug_2 = "";
+                    if (!empty($d_kelas[0]['n_tugas'])) {
+                        if ($d_kelas[0]['n_tugas'] == 1) {
+                            $tug_1 = "selected";
+                        } else {
+                            $tug_2 = "selected";
+                        }
+                    } ?>
+                    <div class="form-group">
+                        <label class="text-black font-w500">Nilai Tugas</label>
+                        <select name="n_tugas" id="n_tugas" required class="form-control default-select">
+                            <option value="1" <?= $tug_1; ?>>Bagikan</option>
+                            <option value="2" <?= $tug_2; ?>>Sembunyikan</option>
+                        </select>
+                    </div>
+                    <?php
+                    $uts_1 = "";
+                    $uts_2 = "";
+                    if (!empty($d_kelas[0]['n_uts'])) {
+                        if ($d_kelas[0]['n_uts'] == 1) {
+                            $uts_1 = "selected";
+                        } else {
+                            $uts_2 = "selected";
+                        }
+                    } ?>
+                    <div class="form-group">
+                        <label class="text-black font-w500">Nilai UTS</label>
+                        <select name="n_uts" id="n_uts" required class="form-control default-select">
+                            <option value="1" <?= $uts_1; ?>>Bagikan</option>
+                            <option value="2" <?= $uts_2; ?>>Sembunyikan</option>
+                        </select>
+                    </div>
+                    <?php
+                    $uas_1 = "";
+                    $uas_2 = "";
+                    if (!empty($d_kelas[0]['n_uas'])) {
+                        if ($d_kelas[0]['n_uas'] == 1) {
+                            $uas_1 = "selected";
+                        } else {
+                            $uas_2 = "selected";
+                        }
+                    } ?>
+                    <div class="form-group">
+                        <label class="text-black font-w500">Nilai UAS</label>
+                        <select name="n_uas" id="n_uas" required class="form-control default-select">
+                            <option value="1" <?= $uas_1; ?>>Bagikan</option>
+                            <option value="2" <?= $uas_2; ?>>Sembunyikan</option>
+                        </select>
+                    </div>
+                    <?php
+                    $sikap_1 = "";
+                    $sikap_2 = "";
+                    if (!empty($d_kelas[0]['n_sikap'])) {
+                        if ($d_kelas[0]['n_sikap'] == 1) {
+                            $sikap_1 = "selected";
+                        } else {
+                            $sikap_2 = "selected";
+                        }
+                    } ?>
+                    <div class="form-group">
+                        <label class="text-black font-w500">Nilai Sikap dan Partisipasi</label>
+                        <select name="n_sikap" id="n_sikap" required class="form-control default-select">
+                            <option value="1" <?= $sikap_1; ?>>Bagikan</option>
+                            <option value="2" <?= $sikap_2; ?>>Sembunyikan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" value="submit_bagikan_nilai" name="submit_bagikan_nilai"
+                            class="btn btn-primary">Simpan Pengaturan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Tambah Bagikan Nilai-->

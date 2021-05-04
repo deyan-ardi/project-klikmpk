@@ -33,27 +33,33 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 
 
-$routes->get('/', 'Home::index');
-$routes->post('/', 'Home::index');
-$routes->get('/informasi-website', 'Home::informasi_website');
-$routes->get('/masuk-kelas/(:num)', 'Home::daftar_kelas/$1');
-$routes->get('/hapus-kelas/(:num)', 'Home::hapus_kelas/$1');
-$routes->get('/hapus-seluruh-mahasiswa/(:num)', 'Home::hapus_all/$1');
-$routes->get('/hapus-mahasiswa/(:num)/(:num)', 'Home::hapus_mahasiswa/$1/$2');
-$routes->post('/masuk-kelas/(:num)', 'Home::daftar_kelas/$1');
-$routes->get('/pengaturan-profil', 'Home::pengaturan_profil');
-$routes->post('/pengaturan-profil', 'Home::pengaturan_profil');
-$routes->get('/hapus-kegiatan-uts/(:num)/(:num)', 'Home::hapus_kegiatan_uts/$1/$2');
-$routes->get('/hapus-kegiatan-uas/(:num)/(:num)', 'Home::hapus_kegiatan_uas/$1/$2');
-$routes->get('/hapus-nilai-uts/(:num)/(:num)', 'Home::hapus_nilai_uts/$1/$2');
-$routes->get('/hapus-nilai-uas/(:num)/(:num)', 'Home::hapus_nilai_uas/$1/$2');
-$routes->get('/hapus-seluruh-nilai-uts/(:num)', 'Home::hapus_seluruh_nilai_uts/$1');
-$routes->get('/hapus-seluruh-nilai-uas/(:num)', 'Home::hapus_seluruh_nilai_uas/$1');
-$routes->get('/hapus-seluruh-nilai-sikap-partisipasi/(:num)', 'Home::hapus_seluruh_nilai_sikap_partisipasi/$1');
-$routes->get('/hapus-nilai-sikap-partisipasi/(:num)/(:num)', 'Home::hapus_nilai_sikap_partisipasi/$1/$2');
-$routes->get('/export-excel/(:num)', 'Home::export_excel/$1');
-
-
+$routes->group('', function ($routes) {
+	$routes->get('/', 'Home::index');
+	$routes->post('/', 'Home::index');
+	$routes->get('/informasi-website', 'Home::informasi_website');
+	$routes->get('/masuk-kelas/(:num)', 'Home::daftar_kelas/$1');
+	$routes->get('/hapus-kelas/(:num)', 'Home::hapus_kelas/$1');
+	$routes->get('/hapus-seluruh-mahasiswa/(:num)', 'Home::hapus_all/$1');
+	$routes->get('/hapus-mahasiswa/(:num)/(:num)', 'Home::hapus_mahasiswa/$1/$2');
+	$routes->post('/masuk-kelas/(:num)', 'Home::daftar_kelas/$1');
+	$routes->get('/pengaturan-profil', 'Home::pengaturan_profil');
+	$routes->post('/pengaturan-profil', 'Home::pengaturan_profil');
+	$routes->get('/hapus-kegiatan-uts/(:num)/(:num)', 'Home::hapus_kegiatan_uts/$1/$2');
+	$routes->get('/hapus-kegiatan-tugas/(:num)/(:num)', 'Home::hapus_kegiatan_tugas/$1/$2');
+	$routes->get('/hapus-kegiatan-uas/(:num)/(:num)', 'Home::hapus_kegiatan_uas/$1/$2');
+	$routes->get('/hapus-nilai-uts/(:num)/(:num)', 'Home::hapus_nilai_uts/$1/$2');
+	$routes->get('/hapus-nilai-uas/(:num)/(:num)', 'Home::hapus_nilai_uas/$1/$2');
+	$routes->get('/hapus-nilai-tugas/(:num)/(:num)', 'Home::hapus_nilai_tugas/$1/$2');
+	$routes->get('/hapus-seluruh-nilai-uts/(:num)', 'Home::hapus_seluruh_nilai_uts/$1');
+	$routes->get('/hapus-seluruh-nilai-uas/(:num)', 'Home::hapus_seluruh_nilai_uas/$1');
+	$routes->get('/hapus-seluruh-nilai-sikap-partisipasi/(:num)', 'Home::hapus_seluruh_nilai_sikap_partisipasi/$1');
+	$routes->get('/hapus-nilai-sikap-partisipasi/(:num)/(:num)', 'Home::hapus_nilai_sikap_partisipasi/$1/$2');
+	$routes->get('/export-excel/(:num)', 'Home::export_excel/$1');
+	$routes->get('/berhenti-membagikan/(:num)', 'Home::berhenti_membagikan/$1');
+});
+$routes->group('b', function ($routes) {
+	$routes->get('(:any)', 'Bagikan::index/$1');
+});
 /*
  * --------------------------------------------------------------------
  * Additional Routing

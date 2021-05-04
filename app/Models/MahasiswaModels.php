@@ -9,7 +9,7 @@ class MahasiswaModels extends Model
     protected $primaryKey = "id_mahasiswa";
     protected $table      = 'mahasiswa';
     protected $useTimestamps = true;
-    protected $allowedFields = ['nim_mahasiswa', 'nama_mahasiswa', 'nilai_sikap', 'nilai_uts', 'nilai_uas','nilai_akhir','skala','karakter', 'created_by'];
+    protected $allowedFields = ['nim_mahasiswa', 'nama_mahasiswa', 'nilai_tugas', 'nilai_sikap', 'nilai_uts', 'nilai_uas', 'nilai_akhir', 'skala', 'karakter', 'created_by'];
     protected $updatedField  = false;
     protected $deletedField  = false;
 
