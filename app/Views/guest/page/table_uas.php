@@ -7,7 +7,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="example3" class="display" style="min-width: 845px">
+                        <table id="example3" class="display col-lg-12">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -58,8 +58,7 @@
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Nilai
                                                                 <?= $nilai['nama_uas']; ?>
-                                                                (<?= $nilai['kategori_uas']; ?>
-                                                                )</label>
+                                                            </label>
                                                             <input type="text" class="form-control" disabled
                                                                 value="<?= $nilai['nilai_uas']; ?>">
                                                         </div>

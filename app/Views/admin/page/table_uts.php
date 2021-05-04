@@ -30,8 +30,8 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Kategori UTS</th>
                                     <th>Nama UTS</th>
+                                    <th>Catatan UTS</th>
                                     <th>Tanggal UTS</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -43,8 +43,8 @@
                                 ?>
                                 <tr>
                                     <td><?= $i++; ?></td>
-                                    <td><?= $uts['kategori_uts']; ?></td>
                                     <td><?= $uts['nama_uts']; ?></td>
+                                    <td><?= $uts['kategori_uts']; ?></td>
                                     <td> <?= date('d F Y', strtotime($uts['tgl_uts'])) ?></td>
                                     <td>
                                         <div class="d-flex">
@@ -74,25 +74,13 @@
                                                                         name="nama_uts"
                                                                         value="<?= (old('nama_uts')) ? old('nama_uts') : $uts['nama_uts']; ?>">
                                                                 </div>
-                                                                <?php
-                                                                    $praktek = "";
-                                                                    $teori = "";
-                                                                    if ($uts['kategori_uts'] == "Teori") {
-                                                                        $teori = "selected";
-                                                                    } else {
-                                                                        $praktek = "selected";
-                                                                    }
-                                                                    ?>
                                                                 <div class="form-group">
-                                                                    <label class="text-black font-w500">Kategori
+                                                                    <label class="text-black font-w500">Catatan
                                                                         UTS</label>
-                                                                    <select class="form-control default-select" required
-                                                                        name="kategori_uts">
-                                                                        <option value="Teori" <?= $teori; ?>>Teori
-                                                                        </option>
-                                                                        <option value="Praktek" <?= $praktek; ?>>
-                                                                            Praktek</option>
-                                                                    </select>
+                                                                    <textarea name="kategori_uts" id="kategori_uts"
+                                                                        class="form-control"
+                                                                        placeholder="Catatan UTS (Opsional)" cols="30"
+                                                                        rows="10"><?= (old('kategori_uts')) ? old('kategori_uts') : $uts['kategori_uts']; ?></textarea>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label class="text-black font-w500">Tanggal
@@ -214,8 +202,7 @@
                                                         <?php if ($n['id_mahasiswa'] == $m['id_mahasiswa']) : ?>
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Nilai
-                                                                <?= $n['nama_uts']; ?> (<?= $n['kategori_uts']; ?>
-                                                                )</label>
+                                                                <?= $n['nama_uts']; ?></label>
                                                             <input type="text" class="form-control" disabled
                                                                 value="<?= $n['nilai_uts']; ?>">
                                                         </div>
@@ -311,11 +298,9 @@
                             value="<?= old('nama_uts'); ?>">
                     </div>
                     <div class="form-group">
-                        <label class="text-black font-w500">Kategori UTS</label>
-                        <select class="form-control default-select" required name="kategori_uts">
-                            <option value="Teori">Teori</option>
-                            <option value="Praktek">Praktek</option>
-                        </select>
+                        <label class="text-black font-w500">Catatan UTS</label>
+                        <textarea name="kategori_uts" id="kategori_uts" class="form-control"
+                            placeholder="Catatan UTS (Opsional)" cols="30" rows="10"></textarea>
                     </div>
                     <div class="form-group">
                         <label class="text-black font-w500">Tanggal UTS</label>
@@ -348,7 +333,7 @@
                         <label class="text-black font-w500">Kategori UTS</label>
                         <select class="form-control default-select" required name="kategori_uts">
                             <?php foreach ($kegiatan_uts as $uts) : ?>
-                            <option value="<?= $uts['id_kegiatan_uts']; ?>"><?= $uts['kategori_uts']; ?> -
+                            <option value="<?= $uts['id_kegiatan_uts']; ?>">
                                 <?= $uts['nama_uts']; ?></option>
                             <?php endforeach; ?>
                         </select>

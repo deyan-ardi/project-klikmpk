@@ -48,6 +48,11 @@
                                         class="nav-link active show">Nilai Keseluruhan</a>
                                 </li>
                                 <?php endif; ?>
+                                <?php if ($d_kelas[0]['n_sikap'] == 1) : ?>
+                                <li class="nav-item"><a href="#sikap" data-toggle="tab" class="nav-link">Nilai Sikap
+                                        dan Partisipasi</a>
+                                </li>
+                                <?php endif; ?>
                                 <?php if ($d_kelas[0]['n_tugas'] == 1) : ?>
                                 <li class="nav-item"><a href="#tugas" data-toggle="tab" class="nav-link">Nilai
                                         Tugas</a>
@@ -62,11 +67,7 @@
                                 <li class="nav-item"><a href="#uas" data-toggle="tab" class="nav-link">Nilai UAS</a>
                                 </li>
                                 <?php endif; ?>
-                                <?php if ($d_kelas[0]['n_sikap'] == 1) : ?>
-                                <li class="nav-item"><a href="#sikap" data-toggle="tab" class="nav-link">Nilai Sikap
-                                        dan Partisipasi</a>
-                                </li>
-                                <?php endif; ?>
+
                                 <?php endif; ?>
                             </ul>
                             <div class="tab-content">

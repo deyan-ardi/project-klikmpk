@@ -30,8 +30,8 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Kategori Tugas</th>
                                     <th>Nama Tugas</th>
+                                    <th>Catatan Tugas</th>
                                     <th>Tanggal Tugas</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -42,8 +42,8 @@
                                 foreach ($kegiatan_tugas as $tugas) : ?>
                                 <tr>
                                     <td><?= $i++; ?></td>
-                                    <td><?= $tugas['kategori_tugas']; ?></td>
                                     <td><?= $tugas['nama_tugas']; ?></td>
+                                    <td><?= $tugas['kategori_tugas']; ?></td>
                                     <td> <?= date('d F Y', strtotime($tugas['tgl_tugas'])) ?></td>
                                     <td>
                                         <div class="d-flex">
@@ -74,25 +74,13 @@
                                                                         name="nama_tugas"
                                                                         value="<?= (old('nama_tugas')) ? old('nama_tugas') : $tugas['nama_tugas']; ?>">
                                                                 </div>
-                                                                <?php
-                                                                    $praktek = "";
-                                                                    $teori = "";
-                                                                    if ($tugas['kategori_tugas'] == "Teori") {
-                                                                        $teori = "selected";
-                                                                    } else {
-                                                                        $praktek = "selected";
-                                                                    }
-                                                                    ?>
                                                                 <div class="form-group">
-                                                                    <label class="text-black font-w500">Kategori
+                                                                    <label class="text-black font-w500">Catatan
                                                                         Tugas</label>
-                                                                    <select class="form-control default-select" required
-                                                                        name="kategori_tugas">
-                                                                        <option value="Teori" <?= $teori; ?>>Teori
-                                                                        </option>
-                                                                        <option value="Praktek" <?= $praktek; ?>>
-                                                                            Praktek</option>
-                                                                    </select>
+                                                                    <textarea name="kategori_tugas" id="kategori_tugas"
+                                                                        class="form-control"
+                                                                        placeholder="Catatan Tugas (Opsional)" cols="30"
+                                                                        rows="10"><?= (old('kategori_tugas')) ? old('kategori_tugas') : $tugas['kategori_tugas']; ?></textarea>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label class="text-black font-w500">Tanggal
@@ -216,8 +204,7 @@
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Nilai
                                                                 <?= $nilai['nama_tugas']; ?>
-                                                                (<?= $nilai['kategori_tugas']; ?>
-                                                                )</label>
+                                                            </label>
                                                             <input type="text" class="form-control" disabled
                                                                 value="<?= $nilai['nilai_tugas']; ?>">
                                                         </div>
@@ -312,11 +299,9 @@
                             value="<?= old('nama_tugas'); ?>">
                     </div>
                     <div class="form-group">
-                        <label class="text-black font-w500">Kategori Tugas</label>
-                        <select class="form-control default-select" required name="kategori_tugas">
-                            <option value="Teori">Teori</option>
-                            <option value="Praktek">Praktek</option>
-                        </select>
+                        <label class="text-black font-w500">Catatan Tugas</label>
+                        <textarea name="kategori_tugas" id="kategori_tugas" class="form-control"
+                            placeholder="Catatan Tugas (Opsional)" cols="30" rows="10"></textarea>
                     </div>
                     <div class="form-group">
                         <label class="text-black font-w500">Tanggal Tugas</label>
@@ -350,7 +335,7 @@
                         <label class="text-black font-w500">Kategori Tugas</label>
                         <select class="form-control default-select" required name="kategori_tugas">
                             <?php foreach ($kegiatan_tugas as $tugas) : ?>
-                            <option value="<?= $tugas['id_kegiatan_tugas']; ?>"><?= $tugas['kategori_tugas']; ?> -
+                            <option value="<?= $tugas['id_kegiatan_tugas']; ?>">
                                 <?= $tugas['nama_tugas']; ?></option>
                             <?php endforeach; ?>
                         </select>

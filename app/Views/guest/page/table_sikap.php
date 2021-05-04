@@ -7,7 +7,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="example3" class="display" style="min-width: 845px">
+                        <table id="example3" class="display col-lg-12">
                             <thead>
                                 <tr>
                                     <th>#</th>

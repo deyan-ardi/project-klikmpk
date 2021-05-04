@@ -7,7 +7,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="example" class="display" style="min-width: 845px">
+                        <table id="example" class="display col-lg-12">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -56,8 +56,7 @@
                                                         <?php if ($n['id_mahasiswa'] == $m['id_mahasiswa']) : ?>
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Nilai
-                                                                <?= $n['nama_uts']; ?> (<?= $n['kategori_uts']; ?>
-                                                                )</label>
+                                                                <?= $n['nama_uts']; ?> </label>
                                                             <input type="text" class="form-control" disabled
                                                                 value="<?= $n['nilai_uts']; ?>">
                                                         </div>

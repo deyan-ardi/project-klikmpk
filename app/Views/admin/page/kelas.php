@@ -175,6 +175,9 @@
                                     <li class="nav-item"><a href="#keseluruhan" data-toggle="tab"
                                             class="nav-link active show">Nilai Keseluruhan</a>
                                     </li>
+                                    <li class="nav-item"><a href="#sikap" data-toggle="tab" class="nav-link">Nilai Sikap
+                                            dan Partisipasi</a>
+                                    </li>
                                     <li class="nav-item"><a href="#tugas" data-toggle="tab" class="nav-link">Nilai
                                             Tugas</a>
                                     </li>
@@ -182,9 +185,6 @@
                                             UTS</a>
                                     </li>
                                     <li class="nav-item"><a href="#uas" data-toggle="tab" class="nav-link">Nilai UAS</a>
-                                    </li>
-                                    <li class="nav-item"><a href="#sikap" data-toggle="tab" class="nav-link">Nilai Sikap
-                                            dan Partisipasi</a>
                                     </li>
                                     <?php if (!empty($d_kelas[0]['tautan'])) : ?>
                                     <li>

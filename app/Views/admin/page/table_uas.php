@@ -30,8 +30,8 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Kategori UAS</th>
                                     <th>Nama UAS</th>
+                                    <th>Catatan UAS</th>
                                     <th>Tanggal UAS</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -42,8 +42,8 @@
                                 foreach ($kegiatan_uas as $uas) : ?>
                                 <tr>
                                     <td><?= $i++; ?></td>
-                                    <td><?= $uas['kategori_uas']; ?></td>
                                     <td><?= $uas['nama_uas']; ?></td>
+                                    <td><?= $uas['kategori_uas']; ?></td>
                                     <td> <?= date('d F Y', strtotime($uas['tgl_uas'])) ?></td>
                                     <td>
                                         <div class="d-flex">
@@ -73,25 +73,13 @@
                                                                         name="nama_uas"
                                                                         value="<?= (old('nama_uas')) ? old('nama_uas') : $uas['nama_uas']; ?>">
                                                                 </div>
-                                                                <?php
-                                                                    $praktek = "";
-                                                                    $teori = "";
-                                                                    if ($uas['kategori_uas'] == "Teori") {
-                                                                        $teori = "selected";
-                                                                    } else {
-                                                                        $praktek = "selected";
-                                                                    }
-                                                                    ?>
                                                                 <div class="form-group">
-                                                                    <label class="text-black font-w500">Kategori
+                                                                    <label class="text-black font-w500">Catatan
                                                                         UAS</label>
-                                                                    <select class="form-control default-select" required
-                                                                        name="kategori_uas">
-                                                                        <option value="Teori" <?= $teori; ?>>Teori
-                                                                        </option>
-                                                                        <option value="Praktek" <?= $praktek; ?>>
-                                                                            Praktek</option>
-                                                                    </select>
+                                                                    <textarea name="kategori_uas" id="kategori_uas"
+                                                                        class="form-control"
+                                                                        placeholder="Catatan UAS (Opsional)" cols="30"
+                                                                        rows="10"><?= (old('kategori_uas')) ? old('kategori_uas') : $uas['kategori_uas']; ?></textarea>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label class="text-black font-w500">Tanggal
@@ -215,8 +203,7 @@
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Nilai
                                                                 <?= $nilai['nama_uas']; ?>
-                                                                (<?= $nilai['kategori_uas']; ?>
-                                                                )</label>
+                                                            </label>
                                                             <input type="text" class="form-control" disabled
                                                                 value="<?= $nilai['nilai_uas']; ?>">
                                                         </div>
@@ -311,11 +298,9 @@
                             value="<?= old('nama_uas'); ?>">
                     </div>
                     <div class="form-group">
-                        <label class="text-black font-w500">Kategori UAS</label>
-                        <select class="form-control default-select" required name="kategori_uas">
-                            <option value="Teori">Teori</option>
-                            <option value="Praktek">Praktek</option>
-                        </select>
+                        <label class="text-black font-w500">Catatan UAS</label>
+                        <textarea name="kategori_uas" id="kategori_uas" class="form-control"
+                            placeholder="Catatan UAS (Opsional)" cols="30" rows="10"></textarea>
                     </div>
                     <div class="form-group">
                         <label class="text-black font-w500">Tanggal UAS</label>
@@ -348,7 +333,7 @@
                         <label class="text-black font-w500">Kategori UAS</label>
                         <select class="form-control default-select" required name="kategori_uas">
                             <?php foreach ($kegiatan_uas as $uas) : ?>
-                            <option value="<?= $uas['id_kegiatan_uas']; ?>"><?= $uas['kategori_uas']; ?> -
+                            <option value="<?= $uas['id_kegiatan_uas']; ?>">
                                 <?= $uas['nama_uas']; ?></option>
                             <?php endforeach; ?>
                         </select>

@@ -53,6 +53,7 @@ $routes->group('', function ($routes) {
 	$routes->get('/hapus-seluruh-nilai-uts/(:num)', 'Home::hapus_seluruh_nilai_uts/$1');
 	$routes->get('/hapus-seluruh-nilai-uas/(:num)', 'Home::hapus_seluruh_nilai_uas/$1');
 	$routes->get('/hapus-seluruh-nilai-sikap-partisipasi/(:num)', 'Home::hapus_seluruh_nilai_sikap_partisipasi/$1');
+	$routes->get('/hapus-seluruh-nilai-tugas/(:num)', 'Home::hapus_seluruh_nilai_tugas/$1');
 	$routes->get('/hapus-nilai-sikap-partisipasi/(:num)/(:num)', 'Home::hapus_nilai_sikap_partisipasi/$1/$2');
 	$routes->get('/export-excel/(:num)', 'Home::export_excel/$1');
 	$routes->get('/berhenti-membagikan/(:num)', 'Home::berhenti_membagikan/$1');

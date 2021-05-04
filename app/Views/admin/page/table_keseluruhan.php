@@ -83,7 +83,7 @@
                                         <?php else : ?>
                                         <td><?= $m['nilai_tugas']; ?></td>
                                         <?php endif; ?>
-                                        <?php if (empty($m['nilai_tugas'])) : ?>
+                                        <?php if (empty($m['nilai_uts'])) : ?>
                                         <td>Belum Ada</td>
                                         <?php else : ?>
                                         <td><?= $m['nilai_uts']; ?></td>
