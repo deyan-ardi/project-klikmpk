@@ -131,6 +131,11 @@
                             <span class="nav-text">Dashboard</span>
                         </a>
                     </li>
+                    <li><a href="<?= base_url(); ?>/bank-soal" class="ai-icon" aria-expanded="false">
+                            <i class="flaticon-044-file"></i>
+                            <span class="nav-text">Bank Soal</span>
+                        </a>
+                    </li>
                     <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                             <i class="flaticon-077-menu-1"></i>
                             <span class="nav-text">Kelas Saya</span>

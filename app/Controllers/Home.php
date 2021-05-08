@@ -9,7 +9,9 @@ use App\Models\KelasModels;
 use App\Models\MahasiswaModels;
 use App\Models\UsersModels;
 use App\Models\KegiatanUTSModels;
+use App\Models\RequestModels;
 use App\Models\SikapModels;
+use App\Models\SoalModels;
 use App\Models\TugasModels;
 use App\Models\UASModels;
 use App\Models\UTSModels;
@@ -33,7 +35,9 @@ class Home extends BaseController
 		$this->m_uts = new UTSModels();
 		$this->m_sikap = new SikapModels();
 		$this->m_tugas = new TugasModels();
+		$this->m_soal = new SoalModels();
 		$this->m_kegiatan_tugas = new KegiatanTugasModels();
+		$this->m_unduh = new RequestModels();
 		$this->validate = \Config\Services::validation();
 		$this->service_img = \Config\Services::image();
 	}
@@ -80,6 +84,74 @@ class Home extends BaseController
 		}
 	}
 
+	public function bank_soal()
+	{
+		if (logged_in() && !empty(user())) {
+			$data = [
+				"title" => "Bank Soal Mata Kuliah",
+				"validation" => $this->validate,
+				"data_soal" => $this->m_soal->findAll(),
+				"data_unduh" => $this->m_unduh->findAll(),
+
+			];
+			if ($this->request->getPost('submit_file_soal')) {
+				$formSubmit = $this->validate([
+					'kategori' => 'required',
+					'matkul' => 'required|max_length[150]',
+					'deskripsi' => 'required|max_length[150]',
+					'file' => 'uploaded[file]|max_size[file,2048]|mime_in[file,application/pdf]|ext_in[file,pdf]',
+				]);
+				if (!$formSubmit) {
+					return redirect()->to('/bank-soal')->withInput();
+				} else {
+					if ($this->request->getFile('file')->getError() == 0) {
+						$dataSoal = $this->request->getFile('file');
+						$namaSoal = $dataSoal->getRandomName();
+						$dataSoal->move('data_soal', $namaSoal);
+						$saveSoal = $this->m_soal->save([
+							'kategori_soal' => $this->request->getPost('kategori'),
+							'mata_kuliah' => $this->request->getPost('matkul'),
+							'deskripsi_soal' => $this->request->getPost('deskripsi'),
+							'file_pdf' => $namaSoal,
+							'created_by' => user()->username,
+						]);
+						if ($saveSoal) {
+							session()->setFlashdata('berhasil', 'Berhasil Menambahkan Soal');
+							return redirect()->to('/bank-soal');
+						} else {
+							session()->setFlashdata('gagal', 'Gagal Menambahkan Soal');
+							return redirect()->to('/bank-soal');
+						}
+					} else if (!empty($this->request->getPost('submit_ajukan_unduh'))) {
+						if ($this->m_unduh->cekApakahAda($this->request->getPost('id_soal'), $this->request->getPost('diajukan')) > 0) {
+							session()->setFlashdata('gagal', 'Gagal, Anda Sudah Mengajukannya');
+							return redirect()->to('/bank-soal');
+						} else {
+							$savePengajuan = $this->m_unduh->save([
+								'id_bank_soal' => $this->request->getPost('id_soal'),
+								'id_user' => $this->request->getPost('id_user'),
+								'status_unduh' => 0,
+								'pesan_pengajuan' => $this->request->getPost('pesan'),
+							]);
+							if ($savePengajuan) {
+								session()->setFlashdata('berhasil', 'Berhasil Menambahkan Pengajuan Unduhan');
+								return redirect()->to('/bank-soal');
+							} else {
+								session()->setFlashdata('gagal', 'Gagal Menambahkan Pengajuan Unduhan');
+								return redirect()->to('/bank-soal');
+							}
+						}
+					} else {
+						dd($this->request->getPost());
+					}
+				}
+			} else {
+				return view('admin/page/bank', $data);
+			}
+		} else {
+			return redirect()->to('/login');
+		}
+	}
 	public function informasi_website()
 	{
 		if (logged_in() && !empty(user())) {
@@ -1380,6 +1452,67 @@ class Home extends BaseController
 				} else {
 					session()->setFlashdata('gagal', 'Gagal Menghapus Seluruh Nilai Tugas');
 					return redirect()->to('/masuk-kelas/' . $id_kelas);
+				}
+			} else {
+				throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+			}
+		} else {
+			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+		}
+	}
+	public function hapus_soal($id_soal = null)
+	{
+		if (logged_in() && !empty(user()) && !empty($id_soal)) {
+			$cari = $this->m_soal->find($id_soal);
+			if (!empty($cari)) {
+				if (unlink('data_soal/' . $cari['file_pdf'])) {
+					$unlink = true;
+				} else {
+					$unlink = false;
+				}
+				if ($unlink) {
+					if ($this->m_soal->delete($id_soal)) {
+						session()->setFlashdata('berhasil', 'Berhasil Menghapus Soal');
+						return redirect()->to('/bank-soal/');
+					} else {
+						session()->setFlashdata('gagal', 'Gagal Menghapus Soal');
+						return redirect()->to('/bank-soal/');
+					}
+				} else {
+					session()->setFlashdata('gagal', 'Gagal Menghapus Soal');
+					return redirect()->to('/bank-soal/');
+				}
+			} else {
+				throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+			}
+		} else {
+			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+		}
+	}
+	public function hapus_seluruh_soal()
+	{
+		if (logged_in() && !empty(user())) {
+			$cari = $this->m_soal->findAll();
+			if (!empty($cari)) {
+				foreach ($cari as $c) {
+					if (unlink('data_soal/' . $c['file_pdf'])) {
+						if ($this->m_soal->delete($c['id_bank_soal'])) {
+							$status = true;
+						} else {
+							$status = false;
+							break;
+						}
+					} else {
+						$status = false;
+						break;
+					}
+				}
+				if ($status) {
+					session()->setFlashdata('berhasil', 'Berhasil Menghapus Seluruh Soal');
+					return redirect()->to('/bank-soal/');
+				} else {
+					session()->setFlashdata('gagal', 'Gagal Menghapus Seluruh Soal');
+					return redirect()->to('/bank-soal/');
 				}
 			} else {
 				throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
