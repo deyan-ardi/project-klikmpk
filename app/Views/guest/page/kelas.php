@@ -21,11 +21,11 @@
                     <div class="profile-info">
                         <div class="profile-details">
                             <div class="profile-name px-3 pt-2">
-                                <h4 class="text-primary mb-0"><?= $d_kelas[0]['mata_kuliah']; ?></h4>
+                                <h4 class="text-primary mb-0"><?= ucWords($d_kelas[0]['mata_kuliah']); ?></h4>
                                 <p>Semester <?= $d_kelas[0]['semester']; ?></p>
                             </div>
                             <div class="profile-email px-2 pt-2">
-                                <h4 class="text-muted mb-0"><?= $d_kelas[0]['nama_kelas']; ?>
+                                <h4 class="text-muted mb-0"><?= ucWords($d_kelas[0]['nama_kelas']); ?>
                                 </h4>
                                 <p><?= $total_per_kelas; ?> Orang Mahasiswa</p>
                             </div>

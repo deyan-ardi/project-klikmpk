@@ -16,4 +16,15 @@ class RequestModels extends Model
     {
         return $this->where('id_bank_soal', $id_soal)->where('id_user', $id_user)->where('status_unduh', 0)->get()->getNumRows();
     }
+    public function whereUser($id_user)
+    {
+        $this->join('bank_soal', 'bank_soal.id_bank_soal = request_unduh.id_bank_soal');
+        return $this->where('id_user', $id_user)->get()->getResultArray();
+    }
+    public function getAll()
+    {
+        $this->join('bank_soal', 'bank_soal.id_bank_soal = request_unduh.id_bank_soal');
+        $this->join('users', 'users.id = request_unduh.id_user');
+        return $this->get()->getResultArray();
+    }
 }

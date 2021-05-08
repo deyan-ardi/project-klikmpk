@@ -40,6 +40,7 @@ class Home extends BaseController
 		$this->m_unduh = new RequestModels();
 		$this->validate = \Config\Services::validation();
 		$this->service_img = \Config\Services::image();
+		$this->email = \Config\Services::email();
 	}
 	public function index()
 	{
@@ -87,11 +88,17 @@ class Home extends BaseController
 	public function bank_soal()
 	{
 		if (logged_in() && !empty(user())) {
+			if (in_groups("admin")) {
+				$data_unduh = $this->m_unduh->getAll();
+			} else {
+				$data_unduh = $this->m_unduh->whereUser(user()->id);
+			}
 			$data = [
 				"title" => "Bank Soal Mata Kuliah",
 				"validation" => $this->validate,
 				"data_soal" => $this->m_soal->findAll(),
 				"data_unduh" => $this->m_unduh->findAll(),
+				"data_unduh_user" => $data_unduh,
 
 			];
 			if ($this->request->getPost('submit_file_soal')) {
@@ -108,7 +115,10 @@ class Home extends BaseController
 						$dataSoal = $this->request->getFile('file');
 						$namaSoal = $dataSoal->getRandomName();
 						$dataSoal->move('data_soal', $namaSoal);
+						$string = "BCDFGHIJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz";
+						$kode_soal = substr(str_shuffle($string), 0, 10);
 						$saveSoal = $this->m_soal->save([
+							'kode_soal' => $kode_soal,
 							'kategori_soal' => $this->request->getPost('kategori'),
 							'mata_kuliah' => $this->request->getPost('matkul'),
 							'deskripsi_soal' => $this->request->getPost('deskripsi'),
@@ -122,27 +132,88 @@ class Home extends BaseController
 							session()->setFlashdata('gagal', 'Gagal Menambahkan Soal');
 							return redirect()->to('/bank-soal');
 						}
-					} else if (!empty($this->request->getPost('submit_ajukan_unduh'))) {
-						if ($this->m_unduh->cekApakahAda($this->request->getPost('id_soal'), $this->request->getPost('diajukan')) > 0) {
-							session()->setFlashdata('gagal', 'Gagal, Anda Sudah Mengajukannya');
-							return redirect()->to('/bank-soal');
-						} else {
-							$savePengajuan = $this->m_unduh->save([
-								'id_bank_soal' => $this->request->getPost('id_soal'),
-								'id_user' => $this->request->getPost('id_user'),
-								'status_unduh' => 0,
-								'pesan_pengajuan' => $this->request->getPost('pesan'),
-							]);
-							if ($savePengajuan) {
+					}
+				}
+			} else if (!empty($this->request->getPost('submit_ajukan_unduh'))) {
+				if ($this->m_unduh->cekApakahAda($this->request->getPost('soal'), $this->request->getPost('user')) > 0) {
+					session()->setFlashdata('gagal', 'Gagal, Anda Sudah Mengajukannya');
+					return redirect()->to('/bank-soal');
+				} else {
+					$formSubmit = $this->validate([
+						'soal' => 'required',
+						'user' => 'required',
+						'pesan' => 'permit_empty|max_length[150]',
+					]);
+					if (!$formSubmit) {
+						return redirect()->to('/bank-soal')->withInput();
+					} else {
+						$savePengajuan = $this->m_unduh->save([
+							'id_bank_soal' => $this->request->getPost('soal'),
+							'id_user' => $this->request->getPost('user'),
+							'status_unduh' => 0,
+							'pesan_pengajuan' => $this->request->getPost('pesan'),
+						]);
+						if ($savePengajuan) {
+							$cariSoal = $this->m_soal->find($this->request->getPost('soal'));
+							$email_admin = array();
+							$admin = $this->m_user->getUserRoleAdmin();
+							foreach ($admin as $a) {
+								array_push($email_admin, $a->email);
+							}
+							$message = "Pengajuan Unduhan Untuk " . "#" . $cariSoal['kode_soal'] . " - Mata Kuliah " . $cariSoal['mata_kuliah'] . " Berhasil Dikirim Ke Admin, Jika Anda Admin, Silahkan Lihat Pada Bagian Status Permintaan";
+							$this->email->setTo($email_admin);
+							$this->email->setFrom('ganatech.id@gmail.com', "From KlikMPK");
+							$this->email->setSubject("Konfirmasi Pengajuan Unduhan");
+							$this->email->setMessage($message);
+							if ($this->email->send()) {
 								session()->setFlashdata('berhasil', 'Berhasil Menambahkan Pengajuan Unduhan');
 								return redirect()->to('/bank-soal');
 							} else {
-								session()->setFlashdata('gagal', 'Gagal Menambahkan Pengajuan Unduhan');
+								session()->setFlashdata('berhasil', 'Email Gagal Dikirim, Namun Berhasil Menambahkan Pengajuan Unduhan');
 								return redirect()->to('/bank-soal');
 							}
+						} else {
+							session()->setFlashdata('gagal', 'Gagal Menambahkan Pengajuan Unduhan');
+							return redirect()->to('/bank-soal');
 						}
+					}
+				}
+			} else if (!empty($this->request->getPost('submit_hubungi_kami'))) {
+				$formSubmit = $this->validate([
+					'email' => 'required|valid_email',
+					'nama' => 'required',
+					'subjek' => 'required',
+					'pesan' => 'required',
+				]);
+				if (!$formSubmit) {
+					return redirect()->to('/bank-soal')->withInput();
+				} else {
+					$UserAgent = $this->request->getUserAgent();
+					if ($UserAgent->isBrowser()) {
+						$currentAgent = $UserAgent->getBrowser() . ' ' . $UserAgent->getVersion();
+					} elseif ($UserAgent->isRobot()) {
+						$currentAgent = $this->agent->robot();
+					} elseif ($UserAgent->isMobile()) {
+						$currentAgent = $UserAgent->getMobile();
 					} else {
-						dd($this->request->getPost());
+						$currentAgent = 'Unidentified User Agent';
+					}
+					$message = "[ Email Pengirim : " . $this->request->getPost('email') . ", IP Address : " . $this->request->getIpAddress() . ", Platform : " . $UserAgent->getPlatform() . ",Browser : " . $currentAgent . " ] ~ " . ucWords($this->request->getPost('pesan'));
+					$email_admin = array(user()->email,);
+					$admin = $this->m_user->getUserRoleAdmin();
+					foreach ($admin as $a) {
+						array_push($email_admin, $a->email);
+					}
+					$this->email->setTo($email_admin);
+					$this->email->setFrom($this->request->getPost('email'), "From [ " . ucWords($this->request->getPost('nama')) . " ]");
+					$this->email->setSubject(ucWords($this->request->getPost('subjek')));
+					$this->email->setMessage($message);
+					if ($this->email->send()) {
+						session()->setFlashdata('berhasil', 'Berhasil Mengirim Email');
+						return redirect()->to('/bank-soal');
+					} else {
+						session()->setFlashdata('gagal', 'Gagal Mengirim Email');
+						return redirect()->to('/bank-soal');
 					}
 				}
 			} else {
@@ -1489,6 +1560,104 @@ class Home extends BaseController
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
 	}
+	public function batalkan_pengajuan($id_request = null)
+	{
+		if (logged_in() && !empty(user()) && !empty($id_request)) {
+			$cari = $this->m_unduh->find($id_request);
+			if (!empty($cari)) {
+				if ($this->m_unduh->delete($id_request)) {
+					$email_admin = array(user()->email,);
+					$admin = $this->m_user->getUserRoleAdmin();
+					foreach ($admin as $a) {
+						array_push($email_admin, $a->email);
+					}
+					$message = "Pembatalan Pengajuan Unduhan Berhasil, Silahkan Cek Dibagian Status Permintaan";
+					$this->email->setTo($email_admin);
+					$this->email->setFrom('ganatech.id@gmail.com', "From KlikMPK");
+					$this->email->setSubject("Konfirmasi Pembatalan Pengajuan Unduhan");
+					$this->email->setMessage($message);
+					if ($this->email->send()) {
+						session()->setFlashdata('berhasil', 'Berhasil Membatalkan Pengajuan');
+						return redirect()->to('/bank-soal/');
+					} else {
+						session()->setFlashdata('berhasil', 'Email Tidak Terkirim, Namun Berhasil Membatalkan Pengajuan');
+						return redirect()->to('/bank-soal/');
+					}
+				} else {
+					session()->setFlashdata('gagal', 'Gagal Membatalkan Pengajuan');
+					return redirect()->to('/bank-soal/');
+				}
+			} else {
+				throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+			}
+		} else {
+			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+		}
+	}
+	public function terima_pengajuan($id_request = null)
+	{
+		if (logged_in() && !empty(user()) && !empty($id_request)) {
+			$cari = $this->m_unduh->find($id_request);
+			if (!empty($cari)) {
+				$updatePengajuan = $this->m_unduh->save([
+					'id_request' => $id_request,
+					'status_unduh' => 1,
+				]);
+
+				if ($updatePengajuan) {
+					$email_admin = array(user()->email,);
+					$admin = $this->m_user->getUserRoleAdmin();
+					foreach ($admin as $a) {
+						array_push($email_admin, $a->email);
+					}
+					$message = "Pengajuan Unduhan Berhasil Diterima, Silahkan Cek Dibagian Status Permintaan Untuk Mengunduh";
+					$this->email->setTo($email_admin);
+					$this->email->setFrom('ganatech.id@gmail.com', "From KlikMPK");
+					$this->email->setSubject("Konfirmasi Persetujuan Pengajuan Unduhan");
+					$this->email->setMessage($message);
+					if ($this->email->send()) {
+						session()->setFlashdata('berhasil', 'Berhasil Menerima Pengajuan');
+						return redirect()->to('/bank-soal/');
+					} else {
+						session()->setFlashdata('berhasil', 'Email Gagal Dikirim, Namun Berhasil Menerima Pengajuan');
+						return redirect()->to('/bank-soal/');
+					}
+				} else {
+					session()->setFlashdata('gagal', 'Gagal Menerima Pengajuan');
+					return redirect()->to('/bank-soal/');
+				}
+			} else {
+				throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+			}
+		} else {
+			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+		}
+	}
+	public function batalkan_terima($id_request = null)
+	{
+		if (logged_in() && !empty(user()) && !empty($id_request)) {
+			$cari = $this->m_unduh->find($id_request);
+			if (!empty($cari)) {
+				if ($cari['status_unduh'] == 1) {
+					$updatePengajuan = $this->m_unduh->save([
+						'id_request' => $id_request,
+						'status_unduh' => 0,
+					]);
+					if ($updatePengajuan) {
+						session()->setFlashdata('berhasil', 'Berhasil Membatalkan Menerima Pengajuan');
+						return redirect()->to('/bank-soal/');
+					} else {
+						session()->setFlashdata('gagal', 'Gagal Membatalkan Menerima Pengajuan');
+						return redirect()->to('/bank-soal/');
+					}
+				}
+			} else {
+				throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+			}
+		} else {
+			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+		}
+	}
 	public function hapus_seluruh_soal()
 	{
 		if (logged_in() && !empty(user())) {
@@ -1660,6 +1829,7 @@ class Home extends BaseController
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
 	}
+
 	public function pengaturan_profil()
 	{
 		if (logged_in() && !empty(user())) {

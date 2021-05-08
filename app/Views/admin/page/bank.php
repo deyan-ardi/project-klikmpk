@@ -70,7 +70,8 @@
                                             class="nav-link active show">Daftar Soal</a>
                                     </li>
                                     <li class="nav-item"><a href="#request" data-toggle="tab" class="nav-link">Status
-                                            Permintaan</a>
+                                            Permintaan <sup class="text-primary"><?= count($data_unduh_user); ?></sup>
+                                        </a>
                                     </li>
                                     <li class="nav-item"><a href="#hubungi" data-toggle="tab" class="nav-link">Hubungi
                                             Saya</a>
@@ -78,6 +79,9 @@
                                 </ul>
                                 <div class="tab-content">
                                     <?= $this->include('admin/page/table_bank'); ?>
+                                    <?= $this->include('admin/page/table_unduh'); ?>
+                                    <?= $this->include('admin/page/table_hubungi'); ?>
+
                                 </div>
                             </div>
                         </div>

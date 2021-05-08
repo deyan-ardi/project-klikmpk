@@ -1,4 +1,4 @@
-<div id="keseluruhan" class="tab-pane fade show active">
+<div id="bank" class="tab-pane fade show active">
     <div class="profile-about-me">
         <div class="pt-4 border-bottom-1 pb-3">
             <div class="col-12">
@@ -38,6 +38,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>Kode Soal</th>
                                         <th>Kategori Soal</th>
                                         <th>Mata Kuliah</th>
                                         <th>Deskripsi Soal</th>
@@ -55,6 +56,7 @@
                                     foreach ($data_soal as $d) : ?>
                                     <tr>
                                         <td><?= $i++; ?></td>
+                                        <td>#<?= $d['kode_soal']; ?></td>
                                         <td><?= ucWords($d['kategori_soal']); ?></td>
                                         <td><?= ucWords($d['mata_kuliah']); ?></td>
                                         <td><?= ucWords($d['deskripsi_soal']); ?></td>
@@ -62,25 +64,9 @@
                                         <td><a href="<?= base_url(); ?>/data_soal/<?= $d['file_pdf']; ?>"
                                                 class="btn btn-primary">Unduh</a></td>
                                         <?php else : ?>
-                                        <?php if (!empty($data_unduh)) : ?>
-                                        <?php foreach ($data_unduh as $u) : ?>
-                                        <?php if ($u['id_user'] == user()->id && $u['id_bank_soal'] == $d['id_bank_soal'] && $u['status_unduh'] == 0) : ?>
-                                        <td><a href="#" class="btn btn-primary" data-toggle="modal"
-                                                data-target="#ajukanUnduhan">
-                                                Ajukan</a></td>
-                                        <?php elseif ($u['id_user'] == user()->id && $u['id_bank_soal'] == $d['id_bank_soal'] && $u['status_unduh'] == 1) : ?>
-                                        <td><a href="#request" data-toggle="tab" class="btn btn-primary">
-                                                Permintaan</a></td>
-                                        <?php else : ?>
-                                        <td><a href="<?= base_url(); ?>/data_soal/<?= $d['file_pdf']; ?>"
-                                                class="btn btn-primary">Unduh</a></td>
-                                        <?php endif; ?>
-                                        <?php endforeach; ?>
-                                        <?php else : ?>
                                         <td><a href="#" class="btn btn-primary" data-toggle="modal"
                                                 data-target="#ajukanUnduhan-<?= $d['id_bank_soal']; ?>">
                                                 Ajukan</a></td>
-                                        <?php endif; ?>
                                         <?php endif; ?>
 
                                         <!-- Ajukan Unduhan-->
@@ -94,27 +80,23 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form action="" method="POST">
+                                                        <form action="" method="POST" enctype="multipart/form-data">
                                                             <?= csrf_field(); ?>
                                                             <div class="form-group">
                                                                 <label class="text-black font-w500">Kode Soal</label>
-                                                                <select name="id_soal" required id="id_soal"
-                                                                    class="form-control default-select">
-                                                                    <option value="<?= $d['id_bank_soal']; ?>" selected>
-                                                                        <?= ucWords($d['kategori_soal']); ?> -
-                                                                        <?= ucWords($d['mata_kuliah']); ?>
-                                                                    </option>
-                                                                </select>
+                                                                <input type="hidden" value="<?= $d['id_bank_soal']; ?>"
+                                                                    name="soal">
+                                                                <input type="text" disabled
+                                                                    value="#<?= ucWords($d['kode_soal']); ?> - <?= ucWords($d['mata_kuliah']); ?>"
+                                                                    class="form-control">
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="text-black font-w500">Diajukan
                                                                     Oleh</label>
-                                                                <select name="diajukan" required id="diajukan"
-                                                                    class="form-control default-select">
-                                                                    <option value="<?= user()->id; ?>" selected>
-                                                                        <?= ucWords(user()->username) ?>
-                                                                    </option>
-                                                                </select>
+                                                                <input type="hidden" value="<?= user()->id; ?>"
+                                                                    name="user">
+                                                                <input type="text" disabled class="form-control"
+                                                                    value="<?= ucWords(user()->username) ?>">
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="text-black font-w500">Pesan Untuk

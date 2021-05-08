@@ -59,6 +59,9 @@ $routes->group('', function ($routes) {
 	$routes->get('/berhenti-membagikan/(:num)', 'Home::berhenti_membagikan/$1', ['filter' => 'role:member,admin']);
 	$routes->get('/bank-soal', 'Home::bank_soal', ['filter' => 'role:member,admin']);
 	$routes->get('/hapus-soal/(:num)', 'Home::hapus_soal/$1', ['filter' => 'role:admin']);
+	$routes->get('/batalkan-pengajuan/(:num)', 'Home::batalkan_pengajuan/$1', ['filter' => 'role:member,admin']);
+	$routes->get('/terima-pengajuan/(:num)', 'Home::terima_pengajuan/$1', ['filter' => 'role:admin']);
+	$routes->get('/batalkan-terima/(:num)', 'Home::batalkan_terima/$1', ['filter' => 'role:admin']);
 	$routes->get('/hapus-seluruh-soal', 'Home::hapus_seluruh_soal', ['filter' => 'role:admin']);
 	$routes->post('/bank-soal', 'Home::bank_soal', ['filter' => 'role:member,admin']);
 });
