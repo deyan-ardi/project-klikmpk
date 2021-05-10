@@ -97,6 +97,7 @@ class Home extends BaseController
 				"title" => "Bank Soal Mata Kuliah",
 				"validation" => $this->validate,
 				"data_soal" => $this->m_soal->findAll(),
+				"kelas" => $this->m_kelas->getAllKelas(user()->id),
 				"data_unduh" => $this->m_unduh->findAll(),
 				"data_unduh_user" => $data_unduh,
 
