@@ -107,7 +107,7 @@ class Home extends BaseController
 					'kategori' => 'required',
 					'matkul' => 'required|max_length[150]',
 					'deskripsi' => 'required|max_length[150]',
-					'file' => 'uploaded[file]|max_size[file,2048]|mime_in[file,application/pdf]|ext_in[file,pdf]',
+					'file' => 'uploaded[file]|max_size[file,2048]|mime_in[file,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document]|ext_in[file,pdf,docx]',
 				]);
 				if (!$formSubmit) {
 					return redirect()->to('/bank-soal')->withInput();

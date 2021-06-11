@@ -176,7 +176,7 @@
                     </div>
                     <div class="form-group">
                         <label class="text-black font-w500">File</label>
-                        <input type="file" accept=".pdf" name="file" required class="form-control">
+                        <input type="file" accept=".pdf,.docx" name="file" required class="form-control">
                     </div>
                     <div class="form-group">
                         <button type="submit" value="submit_file_soal" name="submit_file_soal"
