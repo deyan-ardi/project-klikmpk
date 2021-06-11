@@ -77,31 +77,33 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form>
-                                                        <div class="form-group">
-                                                            <label class="text-black font-w500">Nama
-                                                                Mahasiswa</label>
-                                                            <input type="text" class="form-control" disabled
-                                                                value="<?= $m['nim_mahasiswa']; ?> - <?= $m['nama_mahasiswa']; ?>">
-                                                        </div>
-                                                        <?php foreach ($nilai_sikap as $sikap) : ?>
-                                                        <?php if ($sikap['id_mahasiswa'] == $m['id_mahasiswa']) : ?>
+
+                                                    <div class="form-group">
+                                                        <label class="text-black font-w500">Nama
+                                                            Mahasiswa</label>
+                                                        <input type="text" class="form-control" disabled
+                                                            value="<?= $m['nim_mahasiswa']; ?> - <?= $m['nama_mahasiswa']; ?>">
+                                                    </div>
+                                                    <?php foreach ($nilai_sikap as $sikap) : ?>
+                                                    <?php if ($sikap['id_mahasiswa'] == $m['id_mahasiswa']) : ?>
+                                                    <form method="POST" action="">
+                                                        <?= csrf_field(); ?>
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Santun</label>
-                                                            <input type="number" step="0.01" disabled
-                                                                class="form-control"
+                                                            <input type="number" step="0.01" name="santun" min="0"
+                                                                max="100" class="form-control"
                                                                 value="<?= $sikap['nilai_santun']; ?>">
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Displin</label>
-                                                            <input type="number" step="0.01" disabled
-                                                                class="form-control"
+                                                            <input type="number" step="0.01" name="disiplin" min="0"
+                                                                max="100" class="form-control"
                                                                 value="<?= $sikap['nilai_disiplin']; ?>">
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Berani</label>
-                                                            <input type="number" step="0.01" disabled
-                                                                class="form-control"
+                                                            <input type="number" step="0.01" name="berani" min="0"
+                                                                max="100" class="form-control"
                                                                 value="<?= $sikap['nilai_berani']; ?>">
                                                         </div>
                                                         <div class="form-group">
@@ -110,13 +112,18 @@
                                                                 class="form-control"
                                                                 value="<?= $sikap['hasil_nilai_sikap']; ?>">
                                                         </div>
-                                                        <?php endif; ?>
-                                                        <?php endforeach; ?>
+                                                        <input type="hidden" name="sikap"
+                                                            value="<?= $sikap['id_sikap_partisipasi']; ?>">
+                                                        <input type="hidden" name="mahasiswa"
+                                                            value="<?= $m['id_mahasiswa']; ?>">
                                                         <div class="form-group">
-                                                            <button type="button" data-dismiss="modal"
-                                                                class="btn btn-primary">TUTUP</button>
+                                                            <button type="submit" name="submit_perubahan_sikap"
+                                                                value="submit_perubahan_sikap"
+                                                                class="btn btn-primary">Simpan Perubahan</button>
                                                         </div>
                                                     </form>
+                                                    <?php endif; ?>
+                                                    <?php endforeach; ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -138,31 +145,33 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form>
-                                                        <div class="form-group">
-                                                            <label class="text-black font-w500">Nama
-                                                                Mahasiswa</label>
-                                                            <input type="text" class="form-control" disabled
-                                                                value="<?= $m['nim_mahasiswa']; ?> - <?= $m['nama_mahasiswa']; ?>">
-                                                        </div>
-                                                        <?php foreach ($nilai_sikap as $sikap) : ?>
-                                                        <?php if ($sikap['id_mahasiswa'] == $m['id_mahasiswa']) : ?>
+
+                                                    <div class="form-group">
+                                                        <label class="text-black font-w500">Nama
+                                                            Mahasiswa</label>
+                                                        <input type="text" class="form-control" disabled
+                                                            value="<?= $m['nim_mahasiswa']; ?> - <?= $m['nama_mahasiswa']; ?>">
+                                                    </div>
+                                                    <?php foreach ($nilai_sikap as $sikap) : ?>
+                                                    <?php if ($sikap['id_mahasiswa'] == $m['id_mahasiswa']) : ?>
+                                                    <form method="POST" action="">
+                                                        <?= csrf_field(); ?>
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Kehadiran</label>
-                                                            <input type="number" step="0.01" disabled
-                                                                class="form-control"
+                                                            <input type="number" step="0.01" name="kehadiran" required
+                                                                min="0" max="100" class="form-control"
                                                                 value="<?= $sikap['nilai_kehadiran']; ?>">
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Kepatuhan</label>
-                                                            <input type="number" step="0.01" disabled
-                                                                class="form-control"
+                                                            <input type="number" step="0.01" name="kepatuhan" required
+                                                                min="0" max="100" class="form-control"
                                                                 value="<?= $sikap['nilai_kepatuhan']; ?>">
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="text-black font-w500">Keaktifan</label>
-                                                            <input type="number" step="0.01" disabled
-                                                                class="form-control"
+                                                            <input type="number" step="0.01" name="keaktifan" required
+                                                                min="0" max="100" class="form-control"
                                                                 value="<?= $sikap['nilai_keaktifan']; ?>">
                                                         </div>
                                                         <div class="form-group">
@@ -171,13 +180,19 @@
                                                                 class="form-control"
                                                                 value="<?= $sikap['hasil_nilai_partisipasi']; ?>">
                                                         </div>
-                                                        <?php endif; ?>
-                                                        <?php endforeach; ?>
+                                                        <input type="hidden" name="sikap"
+                                                            value="<?= $sikap['id_sikap_partisipasi']; ?>">
+                                                        <input type="hidden" name="mahasiswa"
+                                                            value="<?= $m['id_mahasiswa']; ?>">
                                                         <div class="form-group">
-                                                            <button type="button" data-dismiss="modal"
-                                                                class="btn btn-primary">TUTUP</button>
+                                                            <button type="submit" name="submit_perubahan_partisipasi"
+                                                                value="submit_perubahan_partisipasi"
+                                                                class="btn btn-primary">Simpan Perubahan</button>
                                                         </div>
                                                     </form>
+                                                    <?php endif; ?>
+                                                    <?php endforeach; ?>
+
                                                 </div>
                                             </div>
                                         </div>

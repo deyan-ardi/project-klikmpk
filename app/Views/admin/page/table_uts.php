@@ -190,29 +190,51 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form action="" method="POST" enctype="multipart/form-data">
 
-                                                        <div class="form-group">
-                                                            <label class="text-black font-w500">Nama
-                                                                Mahasiswa</label>
-                                                            <input type="text" class="form-control" disabled
-                                                                value="<?= $m['nim_mahasiswa']; ?> - <?= $m['nama_mahasiswa']; ?>">
-                                                        </div>
-                                                        <?php foreach ($nilai_uts as $n) : ?>
-                                                        <?php if ($n['id_mahasiswa'] == $m['id_mahasiswa']) : ?>
-                                                        <div class="form-group">
-                                                            <label class="text-black font-w500">Nilai
-                                                                <?= $n['nama_uts']; ?></label>
-                                                            <input type="text" class="form-control" disabled
-                                                                value="<?= $n['nilai_uts']; ?>">
-                                                        </div>
-                                                        <?php endif; ?>
-                                                        <?php endforeach; ?>
-                                                        <div class="form-group">
-                                                            <button type="button" data-dismiss="modal"
-                                                                class="btn btn-primary">TUTUP</button>
+                                                    <div class="form-group">
+                                                        <label class="text-black font-w500">Nama
+                                                            Mahasiswa</label>
+                                                        <input type="text" class="form-control" disabled
+                                                            value="<?= $m['nim_mahasiswa']; ?> - <?= $m['nama_mahasiswa']; ?>">
+                                                    </div>
+                                                    <?php foreach ($nilai_uts as $n) : ?>
+                                                    <?php if ($n['id_mahasiswa'] == $m['id_mahasiswa']) : ?>
+                                                    <form action="" method="POST" enctype="multipart/form-data">
+                                                        <?= csrf_field(); ?>
+                                                        <div class="row">
+                                                            <div class="col-10">
+                                                                <div class="form-group">
+                                                                    <label class="text-black font-w500">Nilai
+                                                                        <?= $n['nama_uts']; ?></label>
+                                                                    <input type="number" step="0.01" min="0" max="100"
+                                                                        required name="nilai_uts" class="form-control"
+                                                                        value="<?= $n['nilai_uts']; ?>">
+                                                                    <input type="hidden" name="mahasiswa"
+                                                                        value="<?= $m['id_mahasiswa']; ?>">
+                                                                    <input type="hidden" name="uts"
+                                                                        value="<?= $n['id_uts']; ?>">
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-2">
+                                                                <div class="d-flex">
+                                                                    <button type="submit" name="submit_perubahan_uts"
+                                                                        value="submit_perubahan_uts"
+                                                                        class="btn btn-success shadow btn-xs sharp"><i
+                                                                            class="fa fa-save text-white"
+                                                                            data-toggle="tooltip"
+                                                                            data-placement="bottom"
+                                                                            title="Simpan Pembaharuan"></i></button>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </form>
+                                                    <?php endif; ?>
+                                                    <?php endforeach; ?>
+                                                    <div class="form-group">
+                                                        <button type="button" data-dismiss="modal"
+                                                            class="btn btn-primary">TUTUP</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

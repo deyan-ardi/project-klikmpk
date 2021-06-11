@@ -190,31 +190,54 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form action="" method="POST" enctype="multipart/form-data">
 
-                                                        <div class="form-group">
-                                                            <label class="text-black font-w500">Nama
-                                                                Mahasiswa</label>
-                                                            <input type="text" class="form-control" disabled
-                                                                value="<?= $m['nim_mahasiswa']; ?> - <?= $m['nama_mahasiswa']; ?>">
-                                                        </div>
 
-                                                        <?php foreach ($nilai_tugas as $nilai) : ?>
-                                                        <?php if ($nilai['id_mahasiswa'] == $m['id_mahasiswa']) : ?>
+                                                    <div class="form-group">
+                                                        <label class="text-black font-w500">Nama
+                                                            Mahasiswa</label>
+                                                        <input type="text" class="form-control" disabled
+                                                            value="<?= $m['nim_mahasiswa']; ?> - <?= $m['nama_mahasiswa']; ?>">
+                                                    </div>
+
+                                                    <?php foreach ($nilai_tugas as $nilai) : ?>
+                                                    <?php if ($nilai['id_mahasiswa'] == $m['id_mahasiswa']) : ?>
+                                                    <form action="" method="POST">
+                                                        <?= csrf_field(); ?>
                                                         <div class="form-group">
-                                                            <label class="text-black font-w500">Nilai
-                                                                <?= $nilai['nama_tugas']; ?>
-                                                            </label>
-                                                            <input type="text" class="form-control" disabled
-                                                                value="<?= $nilai['nilai_tugas']; ?>">
-                                                        </div>
-                                                        <?php endif; ?>
-                                                        <?php endforeach; ?>
-                                                        <div class="form-group">
-                                                            <button type="button" data-dismiss="modal"
-                                                                class="btn btn-primary">TUTUP</button>
+                                                            <div class="row">
+                                                                <div class="col-10">
+                                                                    <label class="text-black font-w500">Nilai
+                                                                        <?= $nilai['nama_tugas']; ?>
+                                                                    </label>
+                                                                    <input type="number" step="0.01" min="0" max="100"
+                                                                        name="nilai_tugas" class="form-control"
+                                                                        value="<?= ($nilai['nilai_tugas']) ? $nilai['nilai_tugas'] : 0; ?>">
+                                                                    <input type="hidden" name="mahasiswa"
+                                                                        value="<?= $m['id_mahasiswa']; ?>">
+                                                                    <input type="hidden" name="tugas"
+                                                                        value="<?= $nilai['id_tugas']; ?>">
+                                                                </div>
+                                                                <div class="col-2">
+                                                                    <div class="d-flex">
+                                                                        <button type="submit"
+                                                                            name="submit_perubahan_tugas"
+                                                                            value="submit_perubahan_tugas"
+                                                                            class="btn btn-success shadow btn-xs sharp"><i
+                                                                                class="fa fa-save text-white"
+                                                                                data-toggle="tooltip"
+                                                                                data-placement="bottom"
+                                                                                title="Simpan Pembaharuan"></i></button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </form>
+                                                    <?php endif; ?>
+                                                    <?php endforeach; ?>
+                                                    <div class="form-group">
+                                                        <button type="button" data-dismiss="modal"
+                                                            class="btn btn-primary">TUTUP</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -226,8 +249,8 @@
                                     <td><strong><?= $m['nilai_tugas']; ?></strong></td>
                                     <?php endif; ?>
                                     <?php
-                                            if ($m['nilai_tugas'] >= 85 && $m['nilai_tugas'] <= 100) {
-                                                $skala = "4,00";
+                                        if ($m['nilai_tugas'] >= 85 && $m['nilai_tugas'] <= 100) {
+                                            $skala = "4,00";
                                                 $huruf = "A";
                                             } else if ($m['nilai_tugas'] >= 81 && $m['nilai_tugas'] <= 84) {
                                                 $skala = "3,75";

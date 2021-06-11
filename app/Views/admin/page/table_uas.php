@@ -189,31 +189,52 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
+
+                                                    <div class="form-group">
+                                                        <label class="text-black font-w500">Nama
+                                                            Mahasiswa</label>
+                                                        <input type="text" class="form-control" disabled
+                                                            value="<?= $m['nim_mahasiswa']; ?> - <?= $m['nama_mahasiswa']; ?>">
+                                                    </div>
+
+                                                    <?php foreach ($nilai_uas as $nilai) : ?>
+                                                    <?php if ($nilai['id_mahasiswa'] == $m['id_mahasiswa']) : ?>
                                                     <form action="" method="POST" enctype="multipart/form-data">
-
-                                                        <div class="form-group">
-                                                            <label class="text-black font-w500">Nama
-                                                                Mahasiswa</label>
-                                                            <input type="text" class="form-control" disabled
-                                                                value="<?= $m['nim_mahasiswa']; ?> - <?= $m['nama_mahasiswa']; ?>">
-                                                        </div>
-
-                                                        <?php foreach ($nilai_uas as $nilai) : ?>
-                                                        <?php if ($nilai['id_mahasiswa'] == $m['id_mahasiswa']) : ?>
-                                                        <div class="form-group">
-                                                            <label class="text-black font-w500">Nilai
-                                                                <?= $nilai['nama_uas']; ?>
-                                                            </label>
-                                                            <input type="text" class="form-control" disabled
-                                                                value="<?= $nilai['nilai_uas']; ?>">
-                                                        </div>
-                                                        <?php endif; ?>
-                                                        <?php endforeach; ?>
-                                                        <div class="form-group">
-                                                            <button type="button" data-dismiss="modal"
-                                                                class="btn btn-primary">TUTUP</button>
+                                                        <?= csrf_field(); ?>
+                                                        <div class="row">
+                                                            <div class="col-10">
+                                                                <div class="form-group">
+                                                                    <label class="text-black font-w500">Nilai
+                                                                        <?= $nilai['nama_uas']; ?>
+                                                                    </label>
+                                                                    <input type="number" step="0.01" min="0" max="100"
+                                                                        class="form-control" required name="nilai_uas"
+                                                                        value="<?= $nilai['nilai_uas']; ?>">
+                                                                    <input type="hidden" name="mahasiswa"
+                                                                        value="<?= $m['id_mahasiswa']; ?>">
+                                                                    <input type="hidden" name="uas"
+                                                                        value="<?= $nilai['id_uas']; ?>">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-2">
+                                                                <div class="d-flex">
+                                                                    <button type="submit" name="submit_perubahan_uas"
+                                                                        value="submit_perubahan_uas"
+                                                                        class="btn btn-success shadow btn-xs sharp"><i
+                                                                            class="fa fa-save text-white"
+                                                                            data-toggle="tooltip"
+                                                                            data-placement="bottom"
+                                                                            title="Simpan Pembaharuan"></i></button>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </form>
+                                                    <?php endif; ?>
+                                                    <?php endforeach; ?>
+                                                    <div class="form-group">
+                                                        <button type="button" data-dismiss="modal"
+                                                            class="btn btn-primary">TUTUP</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
